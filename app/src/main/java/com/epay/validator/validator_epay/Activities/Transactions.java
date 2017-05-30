@@ -3,6 +3,8 @@ package com.epay.validator.validator_epay.Activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.epay.validator.validator_epay.Adapter.CustomTransactionListAdapter;
@@ -20,12 +22,14 @@ public class Transactions extends AppCompatActivity {
     private ListView ListView;
     private List<TransactionData> TransactionList = new ArrayList<TransactionData>();
     CustomTransactionListAdapter adapter;
+    Button sync;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions);
         ListView = (ListView) findViewById(R.id.history_list);
         toolbar = (Toolbar) findViewById(R.id.app_bar_history);
+        sync= (Button) findViewById(R.id.sync);
         toolbar.setTitle("Transactions");
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
@@ -44,6 +48,14 @@ public class Transactions extends AppCompatActivity {
             TransactionList.add(hd);
             // movieList.add(b);
         }
+
+
+        sync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
    
     // Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 

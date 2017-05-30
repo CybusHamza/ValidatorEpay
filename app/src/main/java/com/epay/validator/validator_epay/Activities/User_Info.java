@@ -49,9 +49,8 @@ public class User_Info extends AppCompatActivity {
     Button Save;
     Toolbar toolbar;
     String  is_first;
-
-
     ProgressDialog ringProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,10 +85,9 @@ public class User_Info extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-                editor.putString("stakeholder",stakeholder.getSelectedItem().toString());
-                editor.putString("operator",opperator.getSelectedItem().toString());
-                editor.putString("buss",terminal.getSelectedItem().toString());
+                editor.putString("stakeholder",stakeID_list.get((int) stakeholder.getSelectedItemId()));
+                editor.putString("operator",opId_list.get((int) stakeholder.getSelectedItemId()));
+                editor.putString("buss",bussId_list.get((int) stakeholder.getSelectedItemId()));
                 editor.putString("is_first","true");
 
                 editor.apply();

@@ -1,6 +1,7 @@
 package com.epay.validator.validator_epay.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String routeId;
     String transId;
     String transStatusId;
+    String operator_id;
+    String terminal;
 
     //View Objects
     private Button buttonScan,buttonGetLiveData,buttonTransactions;
@@ -104,7 +107,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ");
                 String strDate = mdformat.format(cal.getTime());
 
-                dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,strDate,strDate,strDate);
+                SharedPreferences  sharedPreferences=  getSharedPreferences("OperatorInfo",MODE_PRIVATE);
+                operator_id = sharedPreferences.getString("operator","");
+                terminal = sharedPreferences.getString("buss","");
+                dbManager.insert_into_transactions(operator_id,terminal,customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,strDate,strDate,strDate);
 
                 Intent intent=new Intent(this,Invoice.class);
                 intent.putExtra("customer_id",customer_id);
