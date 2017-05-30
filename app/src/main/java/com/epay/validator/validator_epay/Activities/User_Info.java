@@ -1,6 +1,7 @@
 package com.epay.validator.validator_epay.Activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +48,7 @@ public class User_Info extends AppCompatActivity {
     String client_id,operator_id;
     Button Save;
     Toolbar toolbar;
+    String  is_first;
 
 
     ProgressDialog ringProgressDialog;
@@ -55,13 +57,23 @@ public class User_Info extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user__info);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo",MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        is_first = sharedPreferences.getString("is_first","false");
+
+        if(is_first.equals("true"))
+        {
+            Intent intent = new Intent(User_Info.this,MainActivity.class);
+            finish();
+            startActivity(intent);
+        }
+        else {
+
         stakeholder = (Spinner) findViewById(R.id.stakeholder);
         opperator = (Spinner) findViewById(R.id.opperator);
         terminal = (Spinner) findViewById(R.id.terminal);
         Save = (Button) findViewById(R.id.button);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo",MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle("Select Information");
@@ -74,19 +86,25 @@ public class User_Info extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
                 editor.putString("stakeholder",stakeholder.getSelectedItem().toString());
                 editor.putString("operator",opperator.getSelectedItem().toString());
                 editor.putString("buss",terminal.getSelectedItem().toString());
+                editor.putString("is_first","true");
 
                 editor.apply();
+
+                Intent intent = new Intent(User_Info.this,MainActivity.class);
+                finish();
+                startActivity(intent);
 
             }
         });
         stakeholder.setOnItemSelectedListener(new CustomOnItemSelectedListener_stake());
         opperator.setOnItemSelectedListener(new CustomOnItemSelectedListener_operator());
 
-        Allstakeholder();
-
+         Allstakeholder();
+        }
     }
 
     public void Allstakeholder() {
