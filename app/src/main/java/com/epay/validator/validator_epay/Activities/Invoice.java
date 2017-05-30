@@ -1,10 +1,12 @@
-package com.epay.validator.validator_epay;
+package com.epay.validator.validator_epay.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+
+import com.epay.validator.validator_epay.R;
 
 /**
  * Created by Rizwan Butt on 26-May-17.

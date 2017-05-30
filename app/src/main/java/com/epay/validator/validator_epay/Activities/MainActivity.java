@@ -1,20 +1,24 @@
-package com.epay.validator.validator_epay;
+package com.epay.validator.validator_epay.Activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.epay.validator.validator_epay.R;
+import com.epay.validator.validator_epay.localDatabase.DBManager;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import localDatabase.DBManager;
 
 //implementing onclicklistener
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {

@@ -1,4 +1,4 @@
-package Network;
+package com.epay.validator.validator_epay.Network;
 
 /**
  * Created by Hamza Android on 4/11/2017.
@@ -9,6 +9,9 @@ public class End_Points {
     public static String LOGIN = BASE_URL + "loginUser";
     public static String SIGNUP = BASE_URL + "signupUser";
     public static String GETDATA = BASE_URL + "getRoutes";
+    public static String GETSTAKE = BASE_URL + "getstakeholder";
+    public static String GETOPERATORS = BASE_URL + "getoperators";
+    public static String GETBUSES= BASE_URL + "getTerminals";
     public static String GETROUTES = BASE_URL + "getDefienedRoutes";
     public static String GETROUTES_RATES = BASE_URL + "getRates";
     public static String GETTRAVEL_HISTORY = BASE_URL + "getTravelHistory";

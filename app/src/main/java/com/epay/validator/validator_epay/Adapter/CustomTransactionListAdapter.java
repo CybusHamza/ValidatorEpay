@@ -1,4 +1,4 @@
-package Adapter;
+package com.epay.validator.validator_epay.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,7 @@ import com.epay.validator.validator_epay.R;
 
 import java.util.List;
 
-import pojo.TransactionData;
+import com.epay.validator.validator_epay.pojo.TransactionData;
 
 /**
  * Created by AQSA SHaaPARR on 4/18/2017.

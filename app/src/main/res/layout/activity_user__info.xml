@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/a"
+
+    tools:context="com.epay.validator.validator_epay.Activities.User_Info">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar">
+
+    </include>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:textColor="#fff"
+        android:layout_marginTop="20dp"
+        android:text="Stake Holder" />
+
+    <Spinner
+        android:id="@+id/stakeholder"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:textColor="#fff"
+        android:background="@drawable/dropdown_mainscreen"
+
+        />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:textColor="#fff"
+        android:text="Operators" />
+
+    <Spinner
+        android:id="@+id/opperator"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#fff"
+        android:layout_margin="20dp"
+        android:background="@drawable/dropdown_mainscreen"
+
+        android:layout_marginRight="10dp"
+        />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:textColor="#fff"
+        android:layout_height="wrap_content"
+        android:text="Busses" />
+
+    <Spinner
+        android:id="@+id/terminal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="#fff"
+        android:layout_margin="20dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/dropdown_mainscreen"
+
+        android:layout_marginRight="10dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="21dp"
+        android:layout_marginTop="70dp"
+        android:text="save" />
+</LinearLayout>

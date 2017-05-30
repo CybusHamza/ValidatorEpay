@@ -1,4 +1,4 @@
-package localDatabase;
+package com.epay.validator.validator_epay.localDatabase;
 
 /**
  * Created by Rizwan Butt on 13-Apr-17.
@@ -8,8 +8,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
-import java.util.ArrayList;
 
 public class DBManager {
 

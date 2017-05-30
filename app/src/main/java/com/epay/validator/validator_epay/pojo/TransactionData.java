@@ -1,4 +1,4 @@
-package pojo;
+package com.epay.validator.validator_epay.pojo;
 
 /**
  * Created by AQSA SHaaPARR on 4/18/2017.

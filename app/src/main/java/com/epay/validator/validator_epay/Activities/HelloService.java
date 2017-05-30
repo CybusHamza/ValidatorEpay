@@ -1,14 +1,11 @@
-package com.epay.validator.validator_epay;
+package com.epay.validator.validator_epay.Activities;
 
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.content.Intent;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,8 +24,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import localDatabase.DBManager;
-import Network.End_Points;
+import com.epay.validator.validator_epay.localDatabase.DBManager;
+import com.epay.validator.validator_epay.Network.End_Points;
 /**
  * Created by Rizwan Butt on 05-May-17.
  */

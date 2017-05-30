@@ -1,19 +1,17 @@
-package com.epay.validator.validator_epay;
+package com.epay.validator.validator_epay.Activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.epay.validator.validator_epay.Adapter.CustomTransactionListAdapter;
+import com.epay.validator.validator_epay.R;
+import com.epay.validator.validator_epay.localDatabase.DBManager;
+import com.epay.validator.validator_epay.pojo.TransactionData;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import Adapter.CustomTransactionListAdapter;
-import localDatabase.DBManager;
-import pojo.TransactionData;
 
 public class Transactions extends AppCompatActivity {
     Toolbar toolbar;

@@ -1,4 +1,4 @@
-package localDatabase;
+package com.epay.validator.validator_epay.localDatabase;
 
 /**
  * Created by Rizwan Butt on 13-Apr-17.
