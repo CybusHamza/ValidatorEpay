@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ValidatorEpay_Github.iml" filepath="$PROJECT_DIR$/ValidatorEpay_Github.iml" />
       <module fileurl="file://$PROJECT_DIR$/Validator_Epay.iml" filepath="$PROJECT_DIR$/Validator_Epay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

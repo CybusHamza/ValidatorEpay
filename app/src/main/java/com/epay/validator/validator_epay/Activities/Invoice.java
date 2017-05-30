@@ -15,8 +15,8 @@ import com.epay.validator.validator_epay.R;
 public class Invoice extends AppCompatActivity {
 
     Toolbar toolbar;
-    String customer_id,fare,fareType,routeId,transId,transStatusId,dat;
-    TextView CustomerId,date,CustomerName,Contact,From,To;
+    String customer_id,fare,fareType,routeId,transId,transStatusId,dat,from,to;
+    TextView CustomerId,date,CustomerName,Contact,From,To,TransactionId;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +27,13 @@ public class Invoice extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        CustomerId= (TextView) findViewById(R.id.t_trans_id);
+        TransactionId= (TextView) findViewById(R.id.t_trans_id);
         date= (TextView) findViewById(R.id.t_date);
         CustomerName= (TextView) findViewById(R.id.t_cust_name);
         Contact= (TextView) findViewById(R.id.t_contact);
-       // CustomerId= (TextView) findViewById(R.id.transId);
+        From= (TextView) findViewById(R.id.t_from);
+        To= (TextView) findViewById(R.id.t_to);
+        // CustomerId= (TextView) findViewById(R.id.transId);
         Intent i=getIntent();
         customer_id=i.getStringExtra("customer_id");
         fare=i.getStringExtra("fare");
@@ -40,8 +42,13 @@ public class Invoice extends AppCompatActivity {
         transId=i.getStringExtra("transId");
         transStatusId=i.getStringExtra("transStatusId");
         dat=i.getStringExtra("date");
-        CustomerId.setText(customer_id);
+        from=i.getStringExtra("from");
+        to=i.getStringExtra("to");
+        // CustomerId.setText(customer_id);
+        TransactionId.setText(transId);
         date.setText(dat);
+        From.setText(from);
+        To.setText(to);
 
     }
 }

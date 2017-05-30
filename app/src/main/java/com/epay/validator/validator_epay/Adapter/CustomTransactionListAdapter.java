@@ -51,8 +51,8 @@ public class CustomTransactionListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         if (inflater== null)
-        inflater = (LayoutInflater) activity
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) activity
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (view == null)
             view = inflater.inflate(R.layout.row_transaction_layout, null);
@@ -70,17 +70,17 @@ public class CustomTransactionListAdapter extends BaseAdapter {
         TransactionData historyData = historyDataList.get(i);
         tvDate.setText(historyData.getCustomer_id());
         tvTransId.setText(historyData.getTrans_id());
-        tvCharge.setText("$"+historyData.getFare_Price());
-      //  int totalFare = Integer.valueOf(historyData.getFare_Price()) * Integer.valueOf( historyData.getPersonTravelling());
+        // tvCharge.setText("$"+historyData.getFare_Price());
+        int totalFare = Integer.valueOf(historyData.getFare_Price()) * Integer.valueOf( historyData.getPersonTravelling());
 
-      /* //tvCharge.setText("$"+ String.valueOf(totalFare));
+        tvCharge.setText("$"+ String.valueOf(totalFare));
         tvCpp.setText("$"+historyData.getFare_Price());
         tvDestinition.setText( historyData.getRoute_destinition());
-         tvStart.setText(historyData.getRouteStart());
+        tvStart.setText(historyData.getRouteStart());
         tvPersons.setText(historyData.getPersonTravelling());
-        tvDate.setText(historyData.getDate());
-        tvTime.setText(historyData.getTime());
-tvTransId.setText(historyData.getTrans_id());*/
+        //tvDate.setText(historyData.getDate());
+        //tvTime.setText(historyData.getTime());
+        tvTransId.setText(historyData.getTrans_id());
 
 
         return view;

@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+
 public class DBManager {
 
     private DatabaseHelper dbHelper;
@@ -83,11 +85,12 @@ public class DBManager {
         contentValue.put(DatabaseHelper.C_CUSTOMER_BALANCE, c_customer_balance);
         long result = database.insert(DatabaseHelper.CUSTOMER_ACCOUNTS, null, contentValue);
     }
-    public void insert_into_history_travel(String h_route_id,String h_user_id,String h_person_traveling,String h_date_added,String h_date_modified) {
+    public void insert_into_history_travel(String h_route_id,String h_trans_data,String h_user_id,String h_person_traveling,String h_date_added,String h_date_modified) {
         ContentValues contentValue = new ContentValues();
 
-       // contentValue.put(DatabaseHelper.H_ID, h_id);
+        // contentValue.put(DatabaseHelper.H_ID, h_id);
         contentValue.put(DatabaseHelper.H_ROUTE_ID, h_route_id);
+        contentValue.put(DatabaseHelper.H_TRANS_ID,h_trans_data);
         contentValue.put(DatabaseHelper.H_USER_ID, h_user_id);
         contentValue.put(DatabaseHelper.H_PERSON_TRAVELING, h_person_traveling);
         contentValue.put(DatabaseHelper.H_DATE_ADDED, h_date_added);
@@ -142,31 +145,96 @@ public class DBManager {
         return daata;
     }
 
-    public String[] fetch_trans_id() {
+    public ArrayList<String> fetch_trans_id() {
         String[] columns = new String[] {DatabaseHelper.T_TRANS_ID};
         Cursor cursor = database.query(DatabaseHelper.TRANSACTIONS_TABLE, columns, null, null, null, null, null);
         int i=0;
-        String[] transid = new String[cursor.getCount()];
+        ArrayList<String> stringArrayList=new ArrayList<String>();
+        if(cursor.moveToFirst()){
+            do
+            {
+                stringArrayList.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        return stringArrayList;
+       /* String[] transid = new String[cursor.getCount()];
         while (cursor.moveToNext()) {
             transid[i]=cursor.getString(0);
             cursor.moveToNext();
             i++;
         }
-        return transid;
+        return transid;*/
     }
 
-    public String[] fetch_fare() {
+    public ArrayList<String> fetch_fare() {
         String[] columns = new String[] {DatabaseHelper.T_AMOUNT_PAID};
         Cursor cursor = database.query(DatabaseHelper.TRANSACTIONS_TABLE, columns, null, null, null, null, null);
         int i=0;
-        String[] amount = new String[cursor.getCount()];
-        while (cursor.moveToNext()) {
-            //cursor.moveToFirst();
-            amount[i]=cursor.getString(0);
-            cursor.moveToNext();
-            i++;
+        ArrayList<String> stringArrayList=new ArrayList<String>();
+        if(cursor.moveToFirst()){
+            do
+            {
+                stringArrayList.add(cursor.getString(0));
+            } while (cursor.moveToNext());
         }
-        return amount;
+        return stringArrayList;
+    }
+    public String fetch_route_id(String trans_id) {
+        String[] args={trans_id};
+        Cursor cursor=database.rawQuery("SELECT route_id FROM TRANSACTIONS WHERE trans_id = ?", args);
+        String id = null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                id=cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+        return id;
+    }
+    public String h_fetch_route_table_start(String id) {
+        String[] args={id};
+        Cursor cursor=database.rawQuery("SELECT route_start FROM ROUTES WHERE id = ?", args);
+        ArrayList<String> stringArrayList=new ArrayList<String>();
+        String route_start=null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                route_start=cursor.getString(0);
+                //   stringArrayList.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        return route_start;
+        //return stringArrayList;
+    }
+    public String h_fetch_route_table_dest(String id) {
+        String[] args={id};
+        Cursor cursor=database.rawQuery("SELECT route_destination FROM ROUTES WHERE id = ?", args);
+        ArrayList<String> stringArrayList=new ArrayList<String>();
+        String route_dest=null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                route_dest=cursor.getString(0);
+                //stringArrayList.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        return route_dest;
+        //return stringArrayList;
+    }
+    public String fetch_no_of_persons(String trans_id) {
+        String[] args={trans_id};
+        Cursor cursor=database.rawQuery("SELECT person_travling FROM HISTORY_TRAVEL WHERE trans_id = ?", args);
+        ArrayList<String> stringArrayList=new ArrayList<String>();
+        String personTraveling=null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                personTraveling=cursor.getString(0);
+                // stringArrayList.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        return personTraveling;
+        //return stringArrayList;
     }
 
     public int update(long _id, String first_name, String last_name,String email,String phone_number) {

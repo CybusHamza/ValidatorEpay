@@ -37,7 +37,7 @@ public class HelloService extends Service {
     String id,route_code,route_name,route_start,route_destination,route_added_date,time,route_added_by,route_updated_date,route_updated_by;
     String fare_id,fare_route,fare_price,fare_type,added_by,update_by,date_added,date_updated;
     String c_id,c_customer_id,c_customer_balance;
-    String h_id,h_route_id,h_user_id,h_person_travling,h_date_added,h_date_modified;
+    String h_id,h_route_id,h_trans_data,h_user_id,h_person_travling,h_date_added,h_date_modified;
 
     String customer_id;
     @Nullable
@@ -117,24 +117,25 @@ public class HelloService extends Service {
                         dbManager.insert_into_fare(fare_id,fare_route,fare_price,fare_type,added_by,update_by,date_added,date_updated);
 
                     }
-                    JSONArray balance = main_object.getJSONArray("balance");
+                   /* JSONArray balance = main_object.getJSONArray("balance");
                     for (int i = 0; i < balance.length(); i++) {
                         JSONObject object = balance.getJSONObject(i);
                         c_id = object.getString("id");
                         c_customer_id = object.getString("customer_id");
                         c_customer_balance = object.getString("customer_balance");
                         dbManager.insert_into_customer_accounts(c_id, c_customer_id, c_customer_balance);
-                    }
+                    }*/
                     JSONArray history = main_object.getJSONArray("history");
                     for (int i = 0; i < history.length(); i++) {
                         JSONObject object = history.getJSONObject(i);
                         h_id=object.getString("id");
                         h_route_id=object.getString("route_id");
                         h_user_id=object.getString("user_id");
+                        h_trans_data=object.getString("trans_id");
                         h_person_travling=object.getString("person_travling");
                         h_date_added=object.getString("date_added");
                         h_date_modified=object.getString("date_modified");
-                        dbManager.insert_into_history_travel(h_route_id,h_user_id,h_person_travling,h_date_added,h_date_modified);
+                        dbManager.insert_into_history_travel(h_route_id,h_trans_data,h_user_id,h_person_travling,h_date_added,h_date_modified);
                     }
 
                 } catch (JSONException e) {
@@ -158,8 +159,8 @@ public class HelloService extends Service {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("customer_id",customer_id);
-                map.put("user_id",customer_id);
+                // map.put("customer_id",customer_id);
+                //map.put("user_id",customer_id);
                 return map;
             }
         };
@@ -172,14 +173,14 @@ public class HelloService extends Service {
         dbManager = new DBManager(HelloService.this);
         dbManager.open();
 
-       // loading = ProgressDialog.show(getApplicationContext(), "", "Please wait..", false, false);
+        // loading = ProgressDialog.show(getApplicationContext(), "", "Please wait..", false, false);
 
         final StringRequest request = new StringRequest(Request.Method.POST, End_Points.GETDATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
 
-               // loading.dismiss();
+                // loading.dismiss();
 
                 try {
                     JSONArray array = new JSONArray(response);

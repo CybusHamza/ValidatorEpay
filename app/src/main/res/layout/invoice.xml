@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/t_trans_id"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="12345"
             android:textColor="@color/zxing_custom_result_view"
@@ -213,53 +213,12 @@
                         android:layout_column="1"
                         android:layout_marginLeft="30dp"/>
 
-
                 </TableRow>
-
-                <TableRow android:background="#fff">
-
-                    <TextView
-                        android:text="Last Name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_marginLeft="30dp"/>
-
-                </TableRow>
-                <TableRow android:background="@color/colorPrimary">
-
-                    <TextView
-                        android:text="First Name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_marginLeft="30dp"/>
-
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"/>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-                </TableRow>
-
             </TableLayout>
         </ScrollView>
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/t_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/textView17"
@@ -268,12 +227,12 @@
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/t_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView18"
-            android:layout_alignEnd="@+id/textView2"
-            android:layout_alignRight="@+id/textView2"
+            android:layout_alignEnd="@+id/t_from"
+            android:layout_alignRight="@+id/t_from"
             android:text="TextView" />
 
 
