@@ -165,6 +165,7 @@ public class DBManager {
             cursor.moveToNext();
             i++;
         }
+
         return transid;*/
     }
 
