@@ -85,13 +85,13 @@ public class DBManager {
         contentValue.put(DatabaseHelper.C_CUSTOMER_BALANCE, c_customer_balance);
         long result = database.insert(DatabaseHelper.CUSTOMER_ACCOUNTS, null, contentValue);
     }
-    public void insert_into_history_travel(String h_route_id,String h_trans_data,String h_user_id,String h_person_traveling,String h_date_added,String h_date_modified) {
+    public void insert_into_history_travel(String h_route_id,String h_user_id,String h_trans_data,String h_person_traveling,String h_date_added,String h_date_modified) {
         ContentValues contentValue = new ContentValues();
 
         // contentValue.put(DatabaseHelper.H_ID, h_id);
         contentValue.put(DatabaseHelper.H_ROUTE_ID, h_route_id);
-        contentValue.put(DatabaseHelper.H_TRANS_ID,h_trans_data);
         contentValue.put(DatabaseHelper.H_USER_ID, h_user_id);
+        contentValue.put(DatabaseHelper.H_TRANS_ID,h_trans_data);
         contentValue.put(DatabaseHelper.H_PERSON_TRAVELING, h_person_traveling);
         contentValue.put(DatabaseHelper.H_DATE_ADDED, h_date_added);
         contentValue.put(DatabaseHelper.H_DATE_MODIFIED, h_date_modified);

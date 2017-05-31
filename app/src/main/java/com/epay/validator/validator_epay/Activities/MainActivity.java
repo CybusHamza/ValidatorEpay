@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String from;
     String to;
     String no_of_persons;
+    String name;
+    String number;
 
     //View Objects
     private Button buttonScan,buttonGetLiveData,buttonTransactions;
@@ -105,13 +107,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 from=qrData[6];
                 to=qrData[7];
                 no_of_persons=qrData[8];
+                name=qrData[9];
+                number=qrData[10];
                 // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
                 Calendar cal = Calendar.getInstance();
                 SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ");
                 String strDate = mdformat.format(cal.getTime());
 
                 dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,strDate,strDate,strDate);
-                dbManager.insert_into_history_travel(routeId,transId,customer_id,no_of_persons,strDate,"0000-00-00");
+                dbManager.insert_into_history_travel(routeId,customer_id,transId,no_of_persons,strDate,"0000-00-00");
                 Intent intent=new Intent(this,Invoice.class);
                 intent.putExtra("customer_id",customer_id);
                 intent.putExtra("fareType",fareType);
@@ -123,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("from",from);
                 intent.putExtra("to",to);
                 intent.putExtra("person_traveling",no_of_persons);
+                intent.putExtra("name",name);
+                intent.putExtra("number",number);
                 startActivity(intent);
             }
         } else {

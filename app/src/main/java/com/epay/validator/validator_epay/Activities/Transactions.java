@@ -45,7 +45,7 @@ public class Transactions extends AppCompatActivity {
             no_of_persons=dbManager.fetch_no_of_persons(trans_id.get(i));
 
             TransactionData hd = new TransactionData();
-            hd.setCustomer_id(customer_id[i]);
+            hd.setCustomer_id(customer_id[0]);
             hd.setTrans_id(trans_id.get(i));
             hd.setFare_Price(amountPaid.get(i));
             hd.setRouteStart(from);
@@ -54,9 +54,7 @@ public class Transactions extends AppCompatActivity {
             TransactionList.add(hd);
             // movieList.add(b);
         }
-
         // Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-
         adapter = new CustomTransactionListAdapter(Transactions.this,TransactionList);
         ListView.setAdapter(adapter);
 
