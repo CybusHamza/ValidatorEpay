@@ -58,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String H_ID = "id";
     public static final String H_ROUTE_ID = "route_id";
     public static final String H_USER_ID = "user_id";
+    public static final String H_TRANS_ID = "trans_id";
     public static final String H_PERSON_TRAVELING = "person_travling";
     public static final String H_DATE_ADDED = "date_added";
     public static final String H_DATE_MODIFIED = "date_modified";
@@ -82,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Database Information
-    static final String DB_NAME = "TICKET_VALIDATOR.DB";
+    static final String DB_NAME = "VALIDATOR_EPAY.DB";
 
     // database version
     static final int DB_VERSION = 1;
@@ -103,7 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static final String CREATE_TABLE_HISTORY_TRAVEL = "create table " + HISTORY_TRAVEL + "(" + H_ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + H_ROUTE_ID + " TEXT, " + H_USER_ID + " TEXT," + H_PERSON_TRAVELING + " TEXT," + H_DATE_ADDED + " TEXT,"+ H_DATE_MODIFIED + " TEXT);";
+            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + H_ROUTE_ID + " TEXT, " + H_USER_ID + " TEXT," + H_TRANS_ID + " TEXT," + H_PERSON_TRAVELING + " TEXT," + H_DATE_ADDED + " TEXT,"+ H_DATE_MODIFIED + " TEXT);";
 
 
     private static final String CREATE_TABLE_TRANSACTIONS = "create table " + TRANSACTIONS_TABLE + "(" + T_ID
@@ -117,7 +118,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-      //  db.execSQL(CREATE_TABLE);
+        //  db.execSQL(CREATE_TABLE);
         db.execSQL(CREATE_TABLE_ROUTES);
         db.execSQL(CREATE_TABLE_FARE);
         db.execSQL(CREATE_TABLE_CUSTOMER_ACCOUNTS);

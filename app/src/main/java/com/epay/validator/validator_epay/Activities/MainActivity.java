@@ -1,7 +1,6 @@
 package com.epay.validator.validator_epay.Activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,8 +29,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String routeId;
     String transId;
     String transStatusId;
-    String operator_id;
-    String terminal;
+    String from;
+    String to;
+    String no_of_persons;
+    String name;
+    String number;
 
     //View Objects
     private Button buttonScan,buttonGetLiveData,buttonTransactions;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         toolbar = (Toolbar) findViewById(R.id.app_bar_history);
+        toolbar = (Toolbar) findViewById(R.id.app_bar_history);
         toolbar.setTitle("MainScreen");
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //that means the encoded format not matches
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
-                   // textViewName.setText(result.getContents());
+                    // textViewName.setText(result.getContents());
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 }
                 ////final qr string customer_id,fare,fareType,routeId,transId,transStatusId////////
@@ -102,16 +104,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 routeId=qrData[3];
                 transId=qrData[4];
                 transStatusId=qrData[5];
-               // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
+                from=qrData[6];
+                to=qrData[7];
+                no_of_persons=qrData[8];
+                name=qrData[9];
+                number=qrData[10];
+                // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
                 Calendar cal = Calendar.getInstance();
                 SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ");
                 String strDate = mdformat.format(cal.getTime());
 
-                SharedPreferences  sharedPreferences=  getSharedPreferences("OperatorInfo",MODE_PRIVATE);
-                operator_id = sharedPreferences.getString("operator","");
-                terminal = sharedPreferences.getString("buss","");
-                dbManager.insert_into_transactions(operator_id,terminal,customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,strDate,strDate,strDate);
-
+                dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,strDate,strDate,strDate);
+                dbManager.insert_into_history_travel(routeId,customer_id,transId,no_of_persons,strDate,"0000-00-00");
                 Intent intent=new Intent(this,Invoice.class);
                 intent.putExtra("customer_id",customer_id);
                 intent.putExtra("fareType",fareType);
@@ -120,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("transStatusId",transStatusId);
                 intent.putExtra("transId",transId);
                 intent.putExtra("date",strDate);
+                intent.putExtra("from",from);
+                intent.putExtra("to",to);
+                intent.putExtra("person_traveling",no_of_persons);
+                intent.putExtra("name",name);
+                intent.putExtra("number",number);
                 startActivity(intent);
             }
         } else {
@@ -130,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         //initiating the qr code scan
         if(view==buttonScan)
-        qrScan.initiateScan();
+            qrScan.initiateScan();
         if(view==buttonGetLiveData)
             getLiveData();
         if(view==buttonTransactions){
