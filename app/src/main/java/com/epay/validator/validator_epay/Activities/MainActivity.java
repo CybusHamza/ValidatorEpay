@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getLiveData();
+
         toolbar = (Toolbar) findViewById(R.id.app_bar_history);
         toolbar.setTitle("MainScreen");
         setSupportActionBar(toolbar);
@@ -57,17 +59,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //View objects
         buttonScan = (Button) findViewById(R.id.buttonScan);
-        buttonGetLiveData= (Button) findViewById(R.id.get_live_data_btn);
+       // buttonGetLiveData= (Button) findViewById(R.id.get_live_data_btn);
         buttonTransactions= (Button) findViewById(R.id.transactions);
-        textViewName = (TextView) findViewById(R.id.textViewName);
-        textViewAddress = (TextView) findViewById(R.id.textViewAddress);
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
 
         //attaching onclick listener
         buttonScan.setOnClickListener(this);
-        buttonGetLiveData.setOnClickListener(this);
+       // buttonGetLiveData.setOnClickListener(this);
         buttonTransactions.setOnClickListener(this);
     }
 
@@ -140,8 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //initiating the qr code scan
         if(view==buttonScan)
             qrScan.initiateScan();
-        if(view==buttonGetLiveData)
-            getLiveData();
+
         if(view==buttonTransactions){
             Intent i=new Intent(this,Transactions.class);
             startActivity(i);

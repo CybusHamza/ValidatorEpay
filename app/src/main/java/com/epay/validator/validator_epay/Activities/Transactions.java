@@ -21,7 +21,7 @@ public class Transactions extends AppCompatActivity {
     private ListView ListView;
     private List<TransactionData> TransactionList = new ArrayList<TransactionData>();
     CustomTransactionListAdapter adapter;
-    String route_id,from,to,no_of_persons;
+    String route_id,from,to,no_of_persons,date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,7 @@ public class Transactions extends AppCompatActivity {
             to=dbManager.h_fetch_route_table_dest(route_id);
             from=dbManager.h_fetch_route_table_start(route_id);
             no_of_persons=dbManager.fetch_no_of_persons(trans_id.get(i));
+            date=dbManager.fetch_date(trans_id.get(i));
 
             TransactionData hd = new TransactionData();
             hd.setCustomer_id(customer_id[0]);
@@ -51,6 +52,7 @@ public class Transactions extends AppCompatActivity {
             hd.setRouteStart(from);
             hd.setRoute_destinition(to);
             hd.setPersonTravelling(no_of_persons);
+            hd.setDate(date);
             TransactionList.add(hd);
             // movieList.add(b);
         }

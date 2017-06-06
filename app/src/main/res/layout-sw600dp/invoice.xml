@@ -2,8 +2,9 @@
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/border">
     <include
         android:id="@+id/app_bar_history"
         layout="@layout/app_bar">
@@ -16,16 +17,19 @@
         android:layout_marginStart="15dp"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Receipt"
+            android:textColor="@android:color/background_dark"
+            android:textSize="70dp" />
 
         <TextView
             android:id="@+id/transId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textView1"
-            android:layout_alignStart="@+id/textView1"
-            android:layout_below="@+id/textView1"
-            android:layout_marginTop="27dp"
-            android:text="Transaction Id:"
+            android:layout_marginTop="87dp"
+            android:text="Id:"
             android:textColor="@android:color/background_dark"
             android:textSize="24sp" />
 
@@ -34,8 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/transId"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginStart="64dp"
             android:layout_toEndOf="@+id/transId"
             android:layout_toRightOf="@+id/transId"
             android:text="12345"
@@ -56,7 +60,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/textView13"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="94dp"
+
             android:text="25-05-2017" />
 
         <TextView
@@ -67,8 +72,6 @@
             android:layout_alignStart="@+id/transId"
             android:layout_below="@+id/textView11"
             android:layout_marginTop="36dp"
-            android:layout_toLeftOf="@+id/t_trans_id"
-            android:layout_toStartOf="@+id/t_trans_id"
             android:text="Name:"
             android:textColor="@android:color/background_dark"
             android:textSize="24sp" />
@@ -79,29 +82,30 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView13"
             android:layout_alignLeft="@+id/textView13"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="100dp"
             android:text="xyzafd" />
 
         <TextView
+
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/t_cust_name"
-            android:layout_toLeftOf="@+id/t_contact"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+           android:layout_below="@+id/textView13"
+            android:layout_marginTop="36dp"
             android:text="Contact:"
             android:textColor="@android:color/background_dark"
-            android:textSize="24sp"
-            android:layout_alignTop="@+id/textView13" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/t_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/t_cust_name"
-            android:layout_alignBottom="@+id/t_cust_name"
-            android:layout_alignEnd="@+id/imageView"
-            android:layout_alignRight="@+id/imageView"
-            android:text="123456789"  />
+            android:layout_alignBottom="@+id/textView15"
+            android:layout_alignLeft="@+id/textView15"
+            android:layout_marginLeft="100dp"
+            android:text="123456789" />
 
         <TextView
             android:id="@+id/textView17"
@@ -109,8 +113,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/imageView"
-            android:layout_marginTop="48dp"
+            android:layout_below="@+id/textView15"
+            android:layout_marginTop="36dp"
             android:text="From:"
             android:textColor="@android:color/background_dark"
             android:textSize="24sp" />
@@ -131,39 +135,50 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_below="@+id/t_contact"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="30dp"
-            android:layout_toEndOf="@+id/t_trans_id"
-            android:layout_toRightOf="@+id/t_trans_id"
-            android:background="@drawable/qr_img" />
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/qr_img"
+            android:layout_marginRight="75dp"
+            android:layout_marginEnd="75dp"
+            android:layout_above="@+id/t_date"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:id="@+id/t_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/textView17"
-            android:layout_toLeftOf="@+id/t_cust_name"
-            android:layout_toStartOf="@+id/t_cust_name"
+            android:layout_alignBottom="@+id/textView17"
+            android:layout_alignLeft="@+id/textView17"
+            android:layout_marginLeft="100dp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/t_to"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_below="@+id/t_from"
             android:layout_alignEnd="@+id/t_from"
             android:layout_alignRight="@+id/t_from"
+            android:layout_below="@+id/t_from"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="53dp"
             android:text="TextView" />
+        <TextView
+            android:id="@+id/tvTicketPurchased"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Tickets Purchased"
+            android:textColor="@android:color/background_dark"
+            android:textSize="40dp"
+            android:background="@drawable/border"
+            android:layout_below="@+id/t_to"
+            android:layout_centerHorizontal="true" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView"
+            android:layout_below="@+id/tvTicketPurchased"
             android:layout_marginTop="40dp">
 
             <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -228,8 +243,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
-                        android:layout_marginLeft="40dp"
-                        />
+                        android:layout_marginLeft="40dp" />
+
                     <TextView
                         android:id="@+id/net"
                         android:layout_width="wrap_content"

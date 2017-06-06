@@ -2,7 +2,7 @@
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/border">
     <include
@@ -16,6 +16,7 @@
         android:layout_margin="15dp"
         android:layout_marginStart="15dp"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/receipt"
             android:layout_width="match_parent"
@@ -29,9 +30,6 @@
             android:id="@+id/transId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textView1"
-            android:layout_alignStart="@+id/textView1"
-            android:layout_below="@+id/textView1"
             android:layout_marginTop="47dp"
             android:text="Id:"
             android:textColor="@android:color/background_dark"
@@ -57,17 +55,16 @@
             android:layout_marginTop="20dp"
             android:text="Date:"
             android:textColor="@android:color/background_dark"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/t_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/textView13"
-            android:text="25-05-2017"
             android:layout_alignLeft="@+id/t_cust_name"
-            android:layout_alignStart="@+id/t_cust_name" />
+            android:layout_alignStart="@+id/t_cust_name"
+            android:text="25-05-2017" />
 
         <TextView
             android:id="@+id/textView13"
@@ -92,11 +89,9 @@
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/t_cust_name"
-            android:layout_alignTop="@+id/t_cust_name"
-            android:layout_toLeftOf="@+id/t_contact"
-            android:layout_marginLeft="350dp"
-            android:text="Contact:"
+            android:layout_below="@+id/t_cust_name"
+            android:layout_marginTop="26dp"
+            android:text="Phone:"
             android:textColor="@android:color/background_dark"
             android:textSize="14sp" />
 
@@ -104,25 +99,25 @@
             android:id="@+id/t_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/t_cust_name"
-            android:layout_alignBottom="@+id/t_cust_name"
-            android:layout_alignEnd="@+id/imageView"
-            android:layout_alignRight="@+id/imageView"
+            android:layout_alignBottom="@+id/textView15"
+            android:layout_alignLeft="@+id/textView15"
+            android:layout_marginLeft="50dp"
             android:text="123456789" />
+
         <LinearLayout
             android:id="@+id/layout1"
-            android:layout_below="@+id/t_cust_name"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="75dp"
+            android:layout_below="@+id/textView15"
             android:weightSum="1">
+
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="From:"
-                android:textColor="@android:color/background_dark"
-                />
+                android:textColor="@android:color/background_dark" />
 
             <TextView
                 android:id="@+id/t_from"
@@ -130,53 +125,60 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
-                android:text="TextView"
-                android:layout_weight="0.20" />
+                android:layout_weight="0.20"
+                android:text="TextView" />
         </LinearLayout>
+
         <LinearLayout
 
-            android:layout_below="@+id/layout1"
-            android:layout_width="150dp"
-            android:layout_height="75dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout1">
+
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To:"
-                android:textColor="@android:color/background_dark"
-                />
+                android:textColor="@android:color/background_dark" />
 
             <TextView
                 android:id="@+id/t_to"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:text="TextView" />
         </LinearLayout>
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="110dp"
             android:layout_height="110dp"
-            android:layout_marginLeft="32dp"
-            android:layout_below="@+id/t_contact"
-            android:layout_toRightOf="@+id/layout1"
-            android:layout_toEndOf="@+id/layout1"
-            android:layout_marginStart="32dp" />
+            android:layout_above="@+id/textView15"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="38dp"
+            android:layout_marginRight="38dp" />
+
         <TextView
             android:id="@+id/ticketPurchasedHeading"
-            android:layout_below="@+id/imageView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/layout1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="5dp"
             android:text="Tickets Purchased"
-            android:textSize="24sp"
-            android:textColor="@android:color/background_dark"/>
+            android:textColor="@android:color/background_dark"
+            android:textSize="24sp" />
 
         <ScrollView
+            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ticketPurchasedHeading"
-            android:layout_marginTop="20dp"
-            android:id="@+id/scrollView2">
+            android:layout_marginTop="20dp">
 
             <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
@@ -239,8 +241,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
-                        android:layout_marginLeft="30dp"
-                        />
+                        android:layout_marginLeft="30dp" />
+
                     <TextView
                         android:id="@+id/net"
                         android:layout_width="wrap_content"

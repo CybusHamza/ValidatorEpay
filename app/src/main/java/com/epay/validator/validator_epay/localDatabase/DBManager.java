@@ -98,7 +98,7 @@ public class DBManager {
         long result = database.insert(DatabaseHelper.HISTORY_TRAVEL, null, contentValue);
     }
 
-    public void insert_into_transactions(String t_terminal_id,String t_operator_id,String t_customer_id,String t_fare_type_id,String t_route_id,String t_bus_type_id,String t_amount_paid,String t_currency,String t_trans_status_id,String t_trans_id,String t_paid_date,String t_trans_date,String t_cancel_date) {
+    public void insert_into_transactions(String t_customer_id,String t_fare_type_id,String t_route_id,String t_bus_type_id,String t_amount_paid,String t_currency,String t_trans_status_id,String t_trans_id,String t_paid_date,String t_trans_date,String t_cancel_date) {
         ContentValues contentValue = new ContentValues();
 
         // contentValue.put(DatabaseHelper.H_ID, h_id);
@@ -106,8 +106,6 @@ public class DBManager {
         contentValue.put(DatabaseHelper.T_FARE_TYPE_ID, t_fare_type_id);
         contentValue.put(DatabaseHelper.T_ROUTE_ID, t_route_id);
         contentValue.put(DatabaseHelper.T_BUS_TYPE_ID, t_bus_type_id);
-        contentValue.put(DatabaseHelper.T_TERMINAL_ID, t_terminal_id);
-        contentValue.put(DatabaseHelper.T_OPERATOR_ID, t_operator_id);
         contentValue.put(DatabaseHelper.T_AMOUNT_PAID, t_amount_paid);
         contentValue.put(DatabaseHelper.T_CURRENCY, t_currency);
         contentValue.put(DatabaseHelper.T_TRANS_STATUS_ID, t_trans_status_id);
@@ -237,6 +235,20 @@ public class DBManager {
             } while (cursor.moveToNext());
         }
         return personTraveling;
+        //return stringArrayList;
+    }
+    public String fetch_date(String trans_id) {
+        String[] args={trans_id};
+        Cursor cursor=database.rawQuery("SELECT date_added FROM HISTORY_TRAVEL WHERE trans_id = ?", args);
+        String date=null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                date=cursor.getString(0);
+                // stringArrayList.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        return date;
         //return stringArrayList;
     }
 

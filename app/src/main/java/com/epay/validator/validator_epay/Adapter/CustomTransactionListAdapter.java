@@ -68,7 +68,7 @@ public class CustomTransactionListAdapter extends BaseAdapter {
         TextView tvTransId = (TextView)view.findViewById(R.id.tvTransId);
 
         TransactionData historyData = historyDataList.get(i);
-        tvDate.setText(historyData.getCustomer_id());
+       // tvDate.setText(historyData.getCustomer_id());
         tvTransId.setText(historyData.getTrans_id());
         // tvCharge.setText("$"+historyData.getFare_Price());
         int totalFare = Integer.valueOf(historyData.getFare_Price()) * Integer.valueOf( historyData.getPersonTravelling());
@@ -78,7 +78,7 @@ public class CustomTransactionListAdapter extends BaseAdapter {
         tvDestinition.setText( historyData.getRoute_destinition());
         tvStart.setText(historyData.getRouteStart());
         tvPersons.setText(historyData.getPersonTravelling());
-        //tvDate.setText(historyData.getDate());
+        tvDate.setText(historyData.getDate());
         //tvTime.setText(historyData.getTime());
         tvTransId.setText(historyData.getTrans_id());
 
