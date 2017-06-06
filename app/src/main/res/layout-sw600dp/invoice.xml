@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -171,7 +171,6 @@
             android:text="Tickets Purchased"
             android:textColor="@android:color/background_dark"
             android:textSize="40dp"
-            android:background="@drawable/border"
             android:layout_below="@+id/t_to"
             android:layout_centerHorizontal="true" />
 
