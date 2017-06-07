@@ -10,6 +10,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DBManager {
 
@@ -112,7 +113,7 @@ public class DBManager {
         contentValue.put(DatabaseHelper.T_TRANS_ID, t_trans_id);
         contentValue.put(DatabaseHelper.T_PAID_DATE, t_paid_date);
         contentValue.put(DatabaseHelper.T_TRANS_DATE, t_trans_date);
-        contentValue.put(DatabaseHelper.T_CANCEL_DATE, t_cancel_date);
+        contentValue.put(DatabaseHelper.T_CANCEL_DATE, "");
         long result = database.insert(DatabaseHelper.TRANSACTIONS_TABLE, null, contentValue);
     }
     public String[] fetch_transaction_table() {
@@ -180,6 +181,41 @@ public class DBManager {
         }
         return stringArrayList;
     }
+
+    public HashMap<Integer,ArrayList<String>> fetch_trans() {
+        Cursor cursor = database.query(DatabaseHelper.TRANSACTIONS_TABLE, null, null, null, null, null, null);
+        int i=0;
+        HashMap<Integer,ArrayList<String>> data = new HashMap<>();
+
+        if(cursor.moveToFirst()){
+            do
+            {
+                ArrayList<String> stringArrayList=new ArrayList<String>();
+                stringArrayList.add(cursor.getString(0));
+                stringArrayList.add(cursor.getString(1));
+                stringArrayList.add(cursor.getString(2));
+                stringArrayList.add(cursor.getString(3));
+                stringArrayList.add(cursor.getString(4));
+                stringArrayList.add(cursor.getString(5));
+                stringArrayList.add(cursor.getString(6));
+                stringArrayList.add(cursor.getString(7));
+                stringArrayList.add(cursor.getString(8));
+                stringArrayList.add(cursor.getString(9));
+                stringArrayList.add(cursor.getString(10));
+                stringArrayList.add(cursor.getString(11));
+                stringArrayList.add(cursor.getString(12));
+                stringArrayList.add(cursor.getString(13));
+
+                data.put(i,stringArrayList);
+                i++;
+
+
+            } while (cursor.moveToNext());
+        }
+        return data;
+    }
+
+
     public String fetch_route_id(String trans_id) {
         String[] args={trans_id};
         Cursor cursor=database.rawQuery("SELECT route_id FROM TRANSACTIONS WHERE trans_id = ?", args);
@@ -277,6 +313,10 @@ public class DBManager {
 
     public void delete(long _id) {
         database.delete(DatabaseHelper.TABLE_NAME, DatabaseHelper._ID + "=" + _id, null);
+    }
+
+    public void deletetrans(long _id) {
+        database.delete(DatabaseHelper.TRANSACTIONS_TABLE, DatabaseHelper.T_ID + "=" + _id, null);
     }
 
 }
