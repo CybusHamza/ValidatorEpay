@@ -138,9 +138,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         //initiating the qr code scan
-        if(view==buttonScan)
+        if(view==buttonScan) {
+            qrScan.setCameraId(1);
             qrScan.initiateScan();
-
+        }
         if(view==buttonTransactions){
             Intent i=new Intent(this,Transactions.class);
             startActivity(i);

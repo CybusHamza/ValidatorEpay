@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/transId"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:text="Date:"
             android:textColor="@android:color/background_dark"
             android:textSize="24sp" />
@@ -59,9 +59,10 @@
             android:id="@+id/t_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/textView13"
-            android:layout_marginLeft="94dp"
 
+            android:layout_above="@+id/textView13"
+            android:layout_alignLeft="@+id/t_trans_id"
+            android:layout_alignStart="@+id/t_trans_id"
             android:text="25-05-2017" />
 
         <TextView
@@ -81,20 +82,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView13"
-            android:layout_alignLeft="@+id/textView13"
-            android:layout_marginLeft="100dp"
-            android:text="xyzafd" />
+            android:text="xyz"
+            android:layout_alignTop="@+id/textView13"
+            android:layout_alignLeft="@+id/t_date"
+            android:layout_alignStart="@+id/t_date"/>
 
         <TextView
-
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-           android:layout_below="@+id/textView13"
+            android:layout_below="@+id/textView13"
             android:layout_marginTop="36dp"
-            android:text="Contact:"
+            android:text="Phone:"
             android:textColor="@android:color/background_dark"
             android:textSize="24sp" />
 
@@ -103,9 +104,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView15"
-            android:layout_alignLeft="@+id/textView15"
-            android:layout_marginLeft="100dp"
-            android:text="123456789" />
+            android:text="123456789"
+            android:layout_alignLeft="@+id/t_cust_name"
+            android:layout_alignStart="@+id/t_cust_name"  />
 
         <TextView
             android:id="@+id/textView17"
@@ -137,21 +138,21 @@
             android:id="@+id/imageView"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:background="@drawable/qr_img"
-            android:layout_marginRight="75dp"
-            android:layout_marginEnd="75dp"
             android:layout_above="@+id/t_date"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_marginEnd="75dp"
+            android:layout_marginRight="75dp"
+            android:background="@drawable/qr_img" />
 
         <TextView
             android:id="@+id/t_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView17"
-            android:layout_alignLeft="@+id/textView17"
-            android:layout_marginLeft="100dp"
-            android:text="TextView" />
+            android:text="TextView"
+            android:layout_alignLeft="@+id/t_contact"
+            android:layout_alignStart="@+id/t_contact" />
 
         <TextView
             android:id="@+id/t_to"
@@ -162,17 +163,20 @@
             android:layout_below="@+id/t_from"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="53dp"
-            android:text="TextView" />
+            android:text="TextView"
+            android:layout_alignBottom="@+id/textView18" />
+
         <TextView
             android:id="@+id/tvTicketPurchased"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/t_to"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
+            android:layout_marginTop="36dp"
             android:text="Tickets Purchased"
             android:textColor="@android:color/background_dark"
-            android:textSize="40dp"
-            android:layout_below="@+id/t_to"
-            android:layout_centerHorizontal="true" />
+            android:textSize="40dp" />
 
         <ScrollView
             android:layout_width="match_parent"
