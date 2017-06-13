@@ -1,6 +1,11 @@
 package com.epay.validator.validator_epay.Activities;
 
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -17,6 +22,11 @@ import com.epay.validator.validator_epay.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.BeaconTransmitter;
+
+import java.util.Arrays;
+
 /**
  * Created by Rizwan Butt on 26-May-17.
  */
@@ -32,6 +42,7 @@ public class Invoice extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.invoice);
+
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
         Point point = new Point();
@@ -69,6 +80,9 @@ public class Invoice extends AppCompatActivity {
         from=i.getStringExtra("from");
         to=i.getStringExtra("to");
         no_of_persons=i.getStringExtra("person_traveling");
+        if (no_of_persons==null || no_of_persons.equals("") || no_of_persons==""){
+            no_of_persons="1";
+        }
         name=i.getStringExtra("name");
         number=i.getStringExtra("number");
         int total=Integer.valueOf(fare) * Integer.valueOf(no_of_persons);
@@ -98,6 +112,95 @@ public class Invoice extends AppCompatActivity {
         Net.setText("$"+String.valueOf(total));
         CustomerName.setText(name);
         Contact.setText(number);
+        if (checkPrerequisites()) {
+            org.altbeacon.beacon.Beacon beacon = new org.altbeacon.beacon.Beacon.Builder()
+                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
+                    .setId2(transId)
+                    .setId3("4")
+                    .setManufacturer(0x0118) // Radius Networks.  Change this for other beacon layouts
+                    .setTxPower(-59)
+                    .setDataFields(Arrays.asList(new Long[]{0l})) // Remove this for beacon layouts without d: fields
+                    .build();
+            // Change the layout below for other beacon types
+            BeaconParser beaconParser = new BeaconParser()
+                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+            BeaconTransmitter beaconTransmitter = new BeaconTransmitter(getApplicationContext(), beaconParser);
+            beaconTransmitter.startAdvertising(beacon);
+        }
+    }
+    private boolean checkPrerequisites() {
 
+        if (android.os.Build.VERSION.SDK_INT < 18) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Bluetooth LE not supported by this device's operating system");
+            builder.setMessage("You will not be able to transmit as a Beacon");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    finish();
+                }
+
+            });
+            builder.show();
+            return false;
+        }
+        if (!getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Bluetooth LE not supported by this device");
+            builder.setMessage("You will not be able to transmit as a Beacon");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    finish();
+                }
+
+            });
+            builder.show();
+            return false;
+        }
+        if (!((BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter().isEnabled()){
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Bluetooth not enabled");
+            builder.setMessage("Please enable Bluetooth and restart this app.");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    finish();
+                }
+
+            });
+            builder.show();
+            return false;
+
+        }
+
+        try {
+            // Check to see if the getBluetoothLeAdvertiser is available.  If not, this will throw an exception indicating we are not running Android L
+            ((BluetoothManager) this.getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter().getBluetoothLeAdvertiser();
+        }
+        catch (Exception e) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Bluetooth LE advertising unavailable");
+            builder.setMessage("Sorry, the operating system on this device does not support Bluetooth LE advertising.  As of July 2014, only the Android L preview OS supports this feature in user-installed apps.");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    finish();
+                }
+
+            });
+            builder.show();
+            return false;
+
+        }
+
+        return true;
     }
 }

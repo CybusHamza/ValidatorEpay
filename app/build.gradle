@@ -30,4 +30,5 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.4.0'
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     testCompile 'junit:junit:4.12'
+    compile 'org.altbeacon:android-beacon-library:2+'
 }
