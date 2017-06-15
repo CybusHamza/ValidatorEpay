@@ -3,9 +3,8 @@ package com.epay.validator.validator_epay.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String number;
 
     //View Objects
-    private Button buttonScan,buttonGetLiveData,buttonTransactions;
+    private LinearLayout buttonScan,buttonTransactions;
     private TextView textViewName, textViewAddress;
 
     //qr code scanner object
@@ -50,17 +49,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getLiveData();
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar_history);
-        toolbar.setTitle("MainScreen");
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+
         dbManager = new DBManager(MainActivity.this);
         dbManager.open();
 
         //View objects
-        buttonScan = (Button) findViewById(R.id.buttonScan);
+        buttonScan = (LinearLayout) findViewById(R.id.buttonScan);
        // buttonGetLiveData= (Button) findViewById(R.id.get_live_data_btn);
-        buttonTransactions= (Button) findViewById(R.id.transactions);
+        buttonTransactions= (LinearLayout) findViewById(R.id.transactions);
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);

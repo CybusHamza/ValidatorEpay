@@ -5,12 +5,15 @@ package com.epay.validator.validator_epay.localDatabase;
  */
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class DBManager {
 
@@ -103,9 +106,20 @@ public class DBManager {
         ContentValues contentValue = new ContentValues();
 
         // contentValue.put(DatabaseHelper.H_ID, h_id);
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("OperatorInfo",MODE_PRIVATE);
+
+        String terminalid, opid;
+
+        terminalid = sharedPreferences.getString("buss","");
+        opid = sharedPreferences.getString("operator","");
+
+
         contentValue.put(DatabaseHelper.T_CUSTOMER_ID, t_customer_id);
         contentValue.put(DatabaseHelper.T_FARE_TYPE_ID, t_fare_type_id);
         contentValue.put(DatabaseHelper.T_ROUTE_ID, t_route_id);
+        contentValue.put(DatabaseHelper.T_TERMINAL_ID, terminalid);
+        contentValue.put(DatabaseHelper.T_OPERATOR_ID, opid);
         contentValue.put(DatabaseHelper.T_BUS_TYPE_ID, t_bus_type_id);
         contentValue.put(DatabaseHelper.T_AMOUNT_PAID, t_amount_paid);
         contentValue.put(DatabaseHelper.T_CURRENCY, t_currency);
@@ -297,6 +311,87 @@ public class DBManager {
         int i = database.update(DatabaseHelper.TABLE_NAME, contentValues, DatabaseHelper._ID + " = " + _id, null);
         return i;
     }
+    public ArrayList<String> fetch_route_start() {
+        String[] columns = new String[] { DatabaseHelper.ROUTE_START};
+        String select = "SELECT DISTINCT " + DatabaseHelper.ROUTE_START + " FROM " + DatabaseHelper.ROUTES;
+        // Cursor cursor = database.query(DatabaseHelper.ROUTES, columns, null, null, null, null, null);
+        Cursor cursor=database.rawQuery(select,null);
+        ArrayList<String> stringArrayList=new ArrayList<String>();
+        stringArrayList.add(0,"<Select>");
+        if(cursor.moveToFirst()){
+            do
+            {
+                stringArrayList.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        return stringArrayList;
+    }
+    public String fetch_route_elapsed_time(String route_start,String route_destination) {
+        String[] args={route_start,route_destination};
+        Cursor cursor=database.rawQuery("SELECT time FROM ROUTES WHERE route_start = ? and route_destination = ?", args);
+        String time = null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                time=cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+        return time;
+    }
+    public String fetch_route_id(String route_start,String route_destination) {
+        String[] args={route_start,route_destination};
+        Cursor cursor=database.rawQuery("SELECT ID FROM ROUTES WHERE route_start = ? and route_destination = ?", args);
+        String id = null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                id=cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+        return id;
+    }
+    public ArrayList<String> fetch_route_table(String route_start) {
+        String[] args={route_start};
+        Cursor cursor=database.rawQuery("SELECT route_destination FROM ROUTES WHERE route_start = ?", args);
+        ArrayList<String> stringArrayList=new ArrayList<String>();
+        stringArrayList.add(0,"<Select>");
+        if(cursor.moveToFirst()){
+            do
+            {
+                stringArrayList.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        return stringArrayList;
+    }
+
+    public String fetch_fare_type(String route_id) {
+        String[] args={route_id};
+        Cursor cursor=database.rawQuery("SELECT Fare_type FROM FARE WHERE Fare_route = "+route_id, null);
+        String fare_type = null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                fare_type=cursor.getString(0);
+
+            } while (cursor.moveToNext());
+        }
+        return fare_type;
+    }
+
+    public String fetch_customer_balance(String customer_id) {
+        String[] args={customer_id};
+        Cursor cursor=database.rawQuery("SELECT customer_balance FROM CUSTOMER_ACCOUNTS WHERE customer_id = "+customer_id,null);
+        String balance = null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                balance=cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+        return balance;
+    }
+
+
     public int update_customer_balance(String customer_id,String customer_remaining_balance) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.C_CUSTOMER_BALANCE, customer_remaining_balance);

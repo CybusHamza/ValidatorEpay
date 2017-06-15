@@ -2,15 +2,20 @@ package com.epay.validator.validator_epay.Activities;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.AdvertiseCallback;
+import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -22,6 +27,7 @@ import com.epay.validator.validator_epay.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 
+import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
 
@@ -39,9 +45,12 @@ public class Invoice extends AppCompatActivity {
 
     ImageView QrCode;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.invoice);
+
+        checkPrerequisites();
 
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
@@ -113,19 +122,32 @@ public class Invoice extends AppCompatActivity {
         CustomerName.setText(name);
         Contact.setText(number);
         if (checkPrerequisites()) {
-            org.altbeacon.beacon.Beacon beacon = new org.altbeacon.beacon.Beacon.Builder()
-                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                    .setId2(transId)
-                    .setId3("4")
-                    .setManufacturer(0x0118) // Radius Networks.  Change this for other beacon layouts
+            final Beacon beacon = new Beacon.Builder()
+                    .setId1("2f234454cf6d4a0fadf2f4911ba9ffa6")
+                    .setId2(customer_id)
+                    .setId3("3")
+                    .setManufacturer(0x0075) //for iBeacon
                     .setTxPower(-59)
-                    .setDataFields(Arrays.asList(new Long[]{0l})) // Remove this for beacon layouts without d: fields
+                    .setDataFields(Arrays.asList(0l))
                     .build();
             // Change the layout below for other beacon types
             BeaconParser beaconParser = new BeaconParser()
-                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-            BeaconTransmitter beaconTransmitter = new BeaconTransmitter(getApplicationContext(), beaconParser);
-            beaconTransmitter.startAdvertising(beacon);
+                    .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+            BeaconTransmitter beaconTransmitter = new BeaconTransmitter(Invoice.this, beaconParser);
+            beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+            beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
+            beaconTransmitter.startAdvertising(beacon, new AdvertiseCallback() {
+
+                @Override
+                public void onStartFailure(int errorCode) {
+                    Log.e("Beacon", "Advertisement start failed with code: "+errorCode);
+                }
+
+                @Override
+                public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+                    Log.i("Beacon", "Advertisement start succeeded. "+ settingsInEffect);
+                }
+            });
         }
     }
     private boolean checkPrerequisites() {

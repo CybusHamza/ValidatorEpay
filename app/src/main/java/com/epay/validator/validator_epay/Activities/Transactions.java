@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Transactions extends AppCompatActivity {
+public class Transactions extends AppCompatActivity  {
     Toolbar toolbar;
     private DBManager dbManager;
     String[] customer_id;
@@ -176,5 +176,6 @@ public class Transactions extends AppCompatActivity {
         requestQueue.add(request);
 
     }
+
 
 }
