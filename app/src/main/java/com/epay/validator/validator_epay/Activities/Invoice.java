@@ -115,7 +115,7 @@ public class Invoice extends AppCompatActivity {
         if (checkPrerequisites()) {
             org.altbeacon.beacon.Beacon beacon = new org.altbeacon.beacon.Beacon.Builder()
                     .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                    .setId2(transId)
+                    .setId2(customer_id)
                     .setId3("4")
                     .setManufacturer(0x0118) // Radius Networks.  Change this for other beacon layouts
                     .setTxPower(-59)

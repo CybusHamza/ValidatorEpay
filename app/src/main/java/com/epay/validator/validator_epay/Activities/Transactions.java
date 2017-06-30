@@ -150,7 +150,6 @@ public class Transactions extends AppCompatActivity {
                 }
             }
 
-
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
