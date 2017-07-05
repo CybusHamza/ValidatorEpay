@@ -31,7 +31,6 @@
         android:layout_margin="20dp"
         android:textColor="#fff"
         android:background="@drawable/dropdown_mainscreen"
-
         />
 
     <TextView

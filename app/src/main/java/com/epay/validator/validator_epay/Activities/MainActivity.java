@@ -1,6 +1,8 @@
 package com.epay.validator.validator_epay.Activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Camera;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -59,7 +61,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonTransactions= (LinearLayout) findViewById(R.id.transactions);
 
         //intializing scan object
+
         qrScan = new IntentIntegrator(this);
+
 
         //attaching onclick listener
         buttonScan.setOnClickListener(this);
@@ -71,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+
         if (result != null) {
             //if qrcode has nothing in it
             if (result.getContents() == null) {
@@ -136,7 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         //initiating the qr code scan
         if(view==buttonScan) {
-            qrScan.setCameraId(1);
+            //qrScan.setCameraId(1);
+
+           qrScan.setOrientationLocked(true);
             qrScan.initiateScan();
         }
         if(view==buttonTransactions){
