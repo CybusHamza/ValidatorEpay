@@ -12,14 +12,18 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.pt.printer.Printer;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.epay.validator.validator_epay.Qr_Genrator.Contents;
 import com.epay.validator.validator_epay.Qr_Genrator.QRCodeEncoder;
@@ -31,7 +35,10 @@ import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
 
+import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Date;
+
 
 /**
  * Created by Rizwan Butt on 26-May-17.
@@ -43,7 +50,11 @@ public class Invoice extends AppCompatActivity {
     String customer_id,fare,fareType,routeId,transId,transStatusId,dat,from,to,no_of_persons,name,number;
     TextView CustomerId,date,CustomerName,Contact,From,To,TransactionId,FareType,No_Of_Persons,FarePrice,Total,Net;
 
+    String line = "==============================";
+    boolean open_flg = false;
+    Printer printer = null;
     ImageView QrCode;
+    Button print;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +65,7 @@ public class Invoice extends AppCompatActivity {
 
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
-        Point point = new Point();
+        final Point point = new Point();
         display.getSize(point);
         int width = point.x;
         int height = point.y;
@@ -149,6 +160,76 @@ public class Invoice extends AppCompatActivity {
                 }
             });
         }
+
+        print = (Button) findViewById(R.id.print);
+
+        print.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                printer = new Printer();
+
+
+                int ret =  printer.open();
+
+
+                if (ret == 0) {
+
+                    Toast.makeText(Invoice.this, "open success!!", Toast.LENGTH_SHORT).show();
+
+                    open_flg = true;
+
+                }
+                else {
+
+
+                    Toast.makeText(Invoice.this, "open fail !!", Toast.LENGTH_SHORT).show();
+
+                    open_flg = false;
+
+                }
+
+
+               String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+                printer.printString(line);
+                printer.setBold(true);
+                printer.setAlignment(1);
+                printer.setFontSize(2);
+                printer.printString("Epay Receipt");
+                printer.setFontSize(0);
+                printer.setBold(false);
+                printer.printPictureByRelativePath("/res/drawable/trans.png", 70, 70);
+                printer.printString(line);
+                printer.setAlignment(0);
+                printer.printString("Date : "+currentDateTimeString);
+                printer.setAlignment(1);
+                printer.printQR("hamza Bin Tariq",4);
+                printer.printString(" ");
+                printer.setAlignment(0);
+                printer.setLeftMargin(2);
+                printer.printString("Customer : " +CustomerName.getText().toString());
+                printer.printString("Date     : "+ date.getText().toString());
+                printer.printString("Trans Id : "  +TransactionId.getText().toString());
+                printer.printString("Fair : " +Total.getText().toString());
+                printer.printString("From : "+From.getText().toString());
+                printer.printString("To   : "+ To.getText().toString());
+                printer.setLeftMargin(0);
+                printer.printString(line);
+                printer.setAlignment(0);
+                printer.printString(" ");
+                printer.printString("Buss id : 1204");
+                printer.printString("Driver  : Rizwan Ahmed");
+
+                printer.close();
+
+
+
+
+
+
+            }
+        });
     }
     private boolean checkPrerequisites() {
 

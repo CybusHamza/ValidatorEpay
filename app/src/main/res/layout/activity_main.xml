@@ -21,6 +21,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
+        <Button
+            android:id="@+id/print"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print" />
+
         <LinearLayout
             android:id="@+id/transactions"
             android:layout_width="match_parent"
@@ -31,6 +37,8 @@
             android:gravity="center"
             android:orientation="vertical"
             tools:background="@color/colorAccent">
+
+
 
             <ImageView
                 android:layout_width="wrap_content"
