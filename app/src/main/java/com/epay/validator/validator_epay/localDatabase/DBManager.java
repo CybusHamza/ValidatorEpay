@@ -196,6 +196,9 @@ public class DBManager {
         return stringArrayList;
     }
 
+
+
+
     public HashMap<Integer,ArrayList<String>> fetch_trans() {
         Cursor cursor = database.query(DatabaseHelper.TRANSACTIONS_TABLE, null, null, null, null, null, null);
         int i=0;
@@ -287,6 +290,8 @@ public class DBManager {
         return personTraveling;
         //return stringArrayList;
     }
+
+
     public String fetch_date(String trans_id) {
         String[] args={trans_id};
         Cursor cursor=database.rawQuery("SELECT date_added FROM HISTORY_TRAVEL WHERE trans_id = ?", args);

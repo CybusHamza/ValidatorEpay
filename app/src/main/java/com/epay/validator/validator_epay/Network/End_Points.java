@@ -1,8 +1,6 @@
 package com.epay.validator.validator_epay.Network;
 
-/**
- * Created by Hamza Android on 4/11/2017.
- */
+
 public class End_Points {
 
     public static String BASE_URL = "http://epay.cybussolutions.com/Api_Service/";

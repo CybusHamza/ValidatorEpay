@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -45,8 +46,10 @@ public class User_Info extends AppCompatActivity {
     private List<String> opId_list;
     private List<String> buss_list;
     private List<String> bussId_list;
+    private List<String> pincodelist;
     String client_id,operator_id;
     Button Save;
+    EditText pincode;
     Toolbar toolbar;
     String  is_first;
     ProgressDialog ringProgressDialog;
@@ -72,6 +75,8 @@ public class User_Info extends AppCompatActivity {
         opperator = (Spinner) findViewById(R.id.opperator);
         terminal = (Spinner) findViewById(R.id.terminal);
         Save = (Button) findViewById(R.id.button);
+        pincode = (EditText) findViewById(R.id.pincode);
+
 
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -84,17 +89,27 @@ public class User_Info extends AppCompatActivity {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int id = (int) terminal.getSelectedItemId();
+                if(pincodelist.get(id).equals(pincode.getText().toString()))
+                {
+                    editor.putString("stakeholder",stakeID_list.get((int) stakeholder.getSelectedItemId()));
+                    editor.putString("operator",opId_list.get((int) stakeholder.getSelectedItemId()));
+                    editor.putString("buss",bussId_list.get((int) stakeholder.getSelectedItemId()));
+                        editor.putString("Pincode",pincodelist.get(id));
+                    editor.putString("is_first","true");
 
-                editor.putString("stakeholder",stakeID_list.get((int) stakeholder.getSelectedItemId()));
-                editor.putString("operator",opId_list.get((int) stakeholder.getSelectedItemId()));
-                editor.putString("buss",bussId_list.get((int) stakeholder.getSelectedItemId()));
-                editor.putString("is_first","true");
+                    editor.apply();
 
-                editor.apply();
+                    Intent intent = new Intent(User_Info.this,MainActivity.class);
+                    finish();
+                    startActivity(intent);
+                }
 
-                Intent intent = new Intent(User_Info.this,MainActivity.class);
-                finish();
-                startActivity(intent);
+                else
+                {
+                    Toast.makeText(User_Info.this, "Please Enter Valid Pin Code", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
@@ -190,15 +205,29 @@ public class User_Info extends AppCompatActivity {
                         ringProgressDialog.dismiss();
                         JSONArray jsonArray = null;
                         try {
+                            String resp = response.trim();
+
                             op_list = new ArrayList<>();
                             opId_list = new ArrayList<>();
 
-                            jsonArray = new JSONArray(response);
-                            for (int i=0; i<jsonArray.length();i++)
+                            if(resp.equals("false"))
                             {
-                                JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
-                                op_list.add(jsonObject.getString("opr_name") );
-                                opId_list.add(jsonObject.getString("id"));
+                                op_list.add("No Records Founds");
+                                opId_list.add("0");
+
+                            }
+                            else
+                            {
+
+
+                                jsonArray = new JSONArray(response);
+                                for (int i=0; i<jsonArray.length();i++)
+                                {
+                                    JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
+                                    op_list.add(jsonObject.getString("opr_name") );
+                                    opId_list.add(jsonObject.getString("id"));
+
+                                }
 
                             }
 
@@ -318,31 +347,51 @@ public class User_Info extends AppCompatActivity {
 
                         ringProgressDialog.dismiss();
                         JSONArray jsonArray = null;
-                        try {
-                            buss_list = new ArrayList<>();
-                            bussId_list = new ArrayList<>();
 
-                            jsonArray = new JSONArray(response);
-                            for (int i=0; i<jsonArray.length();i++)
-                            {
-                                JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
-                                buss_list.add(jsonObject.getString("Bus_Number") );
-                                bussId_list.add(jsonObject.getString("Bus_ID"));
+                        String resp = response.trim();
+
+                        buss_list = new ArrayList<>();
+                        bussId_list = new ArrayList<>();
+                        pincodelist = new ArrayList<>();
+
+                        if(resp.equals("false"))
+                        {
+                            buss_list.add("No Records Founds");
+                            bussId_list.add("0");
+                            pincodelist.add("0");
+
+                        }
+
+                        else
+                        {
+                            try {
+
+                                jsonArray = new JSONArray(response);
+                                for (int i=0; i<jsonArray.length();i++)
+                                {
+                                    JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
+                                    buss_list.add(jsonObject.getString("driver_name") );
+                                    bussId_list.add(jsonObject.getString("driver_id"));
+                                    pincodelist.add(jsonObject.getString("driver_pin_code"));
+
+                                }
 
                             }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
-                            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
-                                    (User_Info.this,  R.layout.spinner_item,buss_list);
-
-                            dataAdapter.setDropDownViewResource
-                                    (android.R.layout.simple_spinner_dropdown_item);
-
-                            terminal.setAdapter(dataAdapter);
                         }
 
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+                                (User_Info.this,  R.layout.spinner_item,buss_list);
+
+                        dataAdapter.setDropDownViewResource
+                                (android.R.layout.simple_spinner_dropdown_item);
+
+                        terminal.setAdapter(dataAdapter);
+
+
                     }
                 }, new Response.ErrorListener() {
             @Override

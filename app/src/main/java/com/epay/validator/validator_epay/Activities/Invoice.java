@@ -18,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -32,6 +34,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
 
@@ -49,12 +52,13 @@ public class Invoice extends AppCompatActivity {
     Toolbar toolbar;
     String customer_id,fare,fareType,routeId,transId,transStatusId,dat,from,to,no_of_persons,name,number;
     TextView CustomerId,date,CustomerName,Contact,From,To,TransactionId,FareType,No_Of_Persons,FarePrice,Total,Net;
-
+    private BeaconManager mBeaconManager;
     String line = "==============================";
     boolean open_flg = false;
     Printer printer = null;
     ImageView QrCode;
     Button print;
+    String Qrsting;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,43 +74,43 @@ public class Invoice extends AppCompatActivity {
         int width = point.x;
         int height = point.y;
         int smallerDimension = width < height ? width : height;
-        smallerDimension = smallerDimension * 3/4;
+        smallerDimension = smallerDimension * 3 / 4;
         toolbar = (Toolbar) findViewById(R.id.app_bar_history);
         toolbar.setTitle("Invoice");
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        QrCode= (ImageView) findViewById(R.id.imageView);
-        TransactionId= (TextView) findViewById(R.id.t_trans_id);
-        date= (TextView) findViewById(R.id.t_date);
-        CustomerName= (TextView) findViewById(R.id.t_cust_name);
-        Contact= (TextView) findViewById(R.id.t_contact);
-        From= (TextView) findViewById(R.id.t_from);
-        To= (TextView) findViewById(R.id.t_to);
-        FareType= (TextView) findViewById(R.id.fareType);
-        No_Of_Persons= (TextView) findViewById(R.id.no_of_persons);
-        FarePrice= (TextView) findViewById(R.id.farePrice);
-        Total= (TextView) findViewById(R.id.total);
-        Net= (TextView) findViewById(R.id.net);
+        QrCode = (ImageView) findViewById(R.id.imageView);
+        TransactionId = (TextView) findViewById(R.id.t_trans_id);
+        date = (TextView) findViewById(R.id.t_date);
+        CustomerName = (TextView) findViewById(R.id.t_cust_name);
+        Contact = (TextView) findViewById(R.id.t_contact);
+        From = (TextView) findViewById(R.id.t_from);
+        To = (TextView) findViewById(R.id.t_to);
+        FareType = (TextView) findViewById(R.id.fareType);
+        No_Of_Persons = (TextView) findViewById(R.id.no_of_persons);
+        FarePrice = (TextView) findViewById(R.id.farePrice);
+        Total = (TextView) findViewById(R.id.total);
+        Net = (TextView) findViewById(R.id.net);
         // CustomerId= (TextView) findViewById(R.id.transId);
-        Intent i=getIntent();
-        customer_id=i.getStringExtra("customer_id");
-        fare=i.getStringExtra("fare");
-        fareType=i.getStringExtra("fareType");
-        routeId=i.getStringExtra("routeId");
-        transId=i.getStringExtra("transId");
-        transStatusId=i.getStringExtra("transStatusId");
-        dat=i.getStringExtra("date");
-        from=i.getStringExtra("from");
-        to=i.getStringExtra("to");
-        no_of_persons=i.getStringExtra("person_traveling");
-        if (no_of_persons==null || no_of_persons.equals("") || no_of_persons==""){
-            no_of_persons="1";
+        Intent i = getIntent();
+        customer_id = i.getStringExtra("customer_id");
+        fare = i.getStringExtra("fare");
+        fareType = i.getStringExtra("fareType");
+        routeId = i.getStringExtra("routeId");
+        transId = i.getStringExtra("transId");
+        transStatusId = i.getStringExtra("transStatusId");
+        dat = i.getStringExtra("date");
+        from = i.getStringExtra("from");
+        to = i.getStringExtra("to");
+        no_of_persons = i.getStringExtra("person_traveling");
+        if (no_of_persons == null || no_of_persons.equals("") || no_of_persons == "") {
+            no_of_persons = "1";
         }
-        name=i.getStringExtra("name");
-        number=i.getStringExtra("number");
-        int total=Integer.valueOf(fare) * Integer.valueOf(no_of_persons);
-        String Qrsting=customer_id+","+fare+","+fareType+","+routeId+","+transId+","+transStatusId+","+dat+","+from+","+to+","+no_of_persons+","+name+","+number;
+        name = i.getStringExtra("name");
+        number = i.getStringExtra("number");
+        int total = Integer.valueOf(fare) * Integer.valueOf(no_of_persons);
+        Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
         QRCodeEncoder qrCodeEncoder = new QRCodeEncoder(Qrsting,
                 null,
                 Contents.Type.TEXT,
@@ -120,30 +124,32 @@ public class Invoice extends AppCompatActivity {
         } catch (WriterException e) {
             e.printStackTrace();
         }
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
         // CustomerId.setText(customer_id);
         TransactionId.setText(transId);
-        date.setText(dat);
+        date.setText(currentDateTimeString);
         From.setText(from);
         To.setText(to);
         FareType.setText(fareType);
         FarePrice.setText(fare);
         No_Of_Persons.setText(no_of_persons);
-        Total.setText("$"+String.valueOf(total));
-        Net.setText("$"+String.valueOf(total));
+        Total.setText("$" + String.valueOf(total));
+        Net.setText("$" + String.valueOf(total));
         CustomerName.setText(name);
         Contact.setText(number);
         if (checkPrerequisites()) {
             final Beacon beacon = new Beacon.Builder()
-                    .setId1("2f234454cf6d4a0fadf2f4911ba9ffa6")
+                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
                     .setId2(customer_id)
-                    .setId3("3")
-                    .setManufacturer(0x0075) //for iBeacon
+                    .setId3("5")
+                    .setManufacturer(0x0118) //for altBeacon
                     .setTxPower(-59)
                     .setDataFields(Arrays.asList(0l))
                     .build();
             // Change the layout below for other beacon types
             BeaconParser beaconParser = new BeaconParser()
-                    .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
             BeaconTransmitter beaconTransmitter = new BeaconTransmitter(Invoice.this, beaconParser);
             beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
             beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
@@ -151,86 +157,85 @@ public class Invoice extends AppCompatActivity {
 
                 @Override
                 public void onStartFailure(int errorCode) {
-                    Log.e("Beacon", "Advertisement start failed with code: "+errorCode);
+                    Log.e("Beacon", "Advertisement start failed with code: " + errorCode);
                 }
 
                 @Override
                 public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                    Log.i("Beacon", "Advertisement start succeeded. "+ settingsInEffect);
+                    Log.i("Beacon", "Advertisement start succeeded. " + settingsInEffect);
+                }
+            });
+
+
+            print = (Button) findViewById(R.id.print);
+
+            print.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    printer = new Printer();
+
+
+                    int ret = printer.open();
+
+
+                    if (ret == 0) {
+
+                        Toast.makeText(Invoice.this, "open success!!", Toast.LENGTH_SHORT).show();
+
+                        open_flg = true;
+
+                    } else {
+
+
+                        Toast.makeText(Invoice.this, "open fail !!", Toast.LENGTH_SHORT).show();
+
+                        open_flg = false;
+
+                    }
+
+
+                    String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+                    printer.printString(line);
+                    printer.setBold(true);
+                    printer.setAlignment(1);
+                    printer.setFontSize(2);
+                    printer.printString("Epay Receipt");
+                    printer.setFontSize(0);
+                    printer.setBold(false);
+                    printer.printPictureByRelativePath("/res/drawable/trans.png", 70, 70);
+                    printer.printString(line);
+                    printer.setAlignment(0);
+                    printer.printString("Date : " + currentDateTimeString);
+                    printer.setAlignment(1);
+                    printer.printQR(Qrsting, 4);
+                    printer.printString(" ");
+                    printer.setAlignment(0);
+                    printer.setLeftMargin(2);
+                    printer.printString("Customer : " + CustomerName.getText().toString());
+                    printer.printString("Date     : " + date.getText().toString());
+                    printer.printString("Trans Id : " + TransactionId.getText().toString());
+                    printer.printString("Fair : " + Total.getText().toString());
+                    printer.printString("From : " + From.getText().toString());
+                    printer.printString("To   : " + To.getText().toString());
+                    printer.setLeftMargin(0);
+                    printer.printString(line);
+                    printer.setAlignment(0);
+                    printer.printString(" ");
+                    printer.printString("Buss id : 1204");
+                    printer.printString("Driver  : Rizwan Ahmed");
+
+                    printer.close();
+
+
                 }
             });
         }
-
-        print = (Button) findViewById(R.id.print);
-
-        print.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                printer = new Printer();
-
-
-                int ret =  printer.open();
-
-
-                if (ret == 0) {
-
-                    Toast.makeText(Invoice.this, "open success!!", Toast.LENGTH_SHORT).show();
-
-                    open_flg = true;
-
-                }
-                else {
-
-
-                    Toast.makeText(Invoice.this, "open fail !!", Toast.LENGTH_SHORT).show();
-
-                    open_flg = false;
-
-                }
-
-
-               String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-                printer.printString(line);
-                printer.setBold(true);
-                printer.setAlignment(1);
-                printer.setFontSize(2);
-                printer.printString("Epay Receipt");
-                printer.setFontSize(0);
-                printer.setBold(false);
-                printer.printPictureByRelativePath("/res/drawable/trans.png", 70, 70);
-                printer.printString(line);
-                printer.setAlignment(0);
-                printer.printString("Date : "+currentDateTimeString);
-                printer.setAlignment(1);
-                printer.printQR("hamza Bin Tariq",4);
-                printer.printString(" ");
-                printer.setAlignment(0);
-                printer.setLeftMargin(2);
-                printer.printString("Customer : " +CustomerName.getText().toString());
-                printer.printString("Date     : "+ date.getText().toString());
-                printer.printString("Trans Id : "  +TransactionId.getText().toString());
-                printer.printString("Fair : " +Total.getText().toString());
-                printer.printString("From : "+From.getText().toString());
-                printer.printString("To   : "+ To.getText().toString());
-                printer.setLeftMargin(0);
-                printer.printString(line);
-                printer.setAlignment(0);
-                printer.printString(" ");
-                printer.printString("Buss id : 1204");
-                printer.printString("Driver  : Rizwan Ahmed");
-
-                printer.close();
-
-
-
-
-
-
-            }
-        });
     }
+
+
+
     private boolean checkPrerequisites() {
 
         if (android.os.Build.VERSION.SDK_INT < 18) {
@@ -305,5 +310,17 @@ public class Invoice extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 }

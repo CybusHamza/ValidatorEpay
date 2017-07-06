@@ -1,63 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+   android:layout_height="wrap_content">
+
+
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@drawable/bg_list_history"-->
+    <!--android:paddingTop="15dp"-->
+    <!--android:paddingLeft="5dp"-->
+
+    <!--android:paddingRight="5dp"-->
+    <!--/>-->
     <LinearLayout
         android:layout_width="180dp"
-        android:layout_height="137dp"
+        android:layout_height="180dp"
         android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:paddingBottom="5dp"
         android:layout_marginLeft="15dp"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="5dp">
 
         <TextView
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-
-            android:text="random num"
             android:id="@+id/tvTransId"
-            android:textSize="15sp"
+            android:layout_width="150dp"
+
+            android:layout_height="wrap_content"
             android:gravity="left"
-            android:textColor="#fff"/>
+            android:text="random num"
+            android:textColor="#fff"
+            android:textSize="15sp" />
 
         <TextView
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-
-            android:text="$350"
-            android:textSize="35sp"
-            android:gravity="left"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
             android:id="@+id/tvCharge"
-            android:textColor="#fff"/>
+            android:layout_width="130dp"
+
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:text="$350"
+            android:textColor="#fff"
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-
-            android:text="Date"
-            android:textSize="15sp"
-            android:gravity="left"
-
             android:id="@+id/tvTime"
-            android:textColor="#fff"/>
+            android:layout_width="130dp"
+
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Date"
+
+            android:textColor="#fff"
+            android:textSize="15sp" />
 
         <TextView
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-
-            android:text="Date"
-            android:textSize="15sp"
-            android:gravity="left"
             android:id="@+id/tvDate"
-            android:textColor="#fff"/>
+            android:layout_width="130dp"
 
-
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Date"
+            android:textColor="#fff"
+            android:textSize="15sp" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="1dp"
         android:layout_height="137dp"
@@ -69,15 +80,7 @@
             android:layout_marginBottom="13dp"
             android:background="#C0C0C0"/>
     </LinearLayout>
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:src="@drawable/bg_list_history"-->
-    <!--android:paddingTop="15dp"-->
-    <!--android:paddingLeft="5dp"-->
 
-    <!--android:paddingRight="5dp"-->
-    <!--/>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -94,24 +97,24 @@
             android:padding="5dp"
             android:id="@+id/tvStartingPoint"
             android:text="Johar Town"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="50dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="7dp"
             android:textColor="#fff"
             android:textSize="20sp"
             android:textStyle="bold" />
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="#C0C0C0"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--android:layout_marginRight="5dp"/>-->
+        <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#C0C0C0"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="3dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="50dp"
             android:layout_marginRight="10dp"
             android:id="@+id/tvDestinationPoint"
             android:text="cheeechaaa watniii"
@@ -120,7 +123,7 @@
             android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         <LinearLayout
@@ -130,24 +133,27 @@
             android:layout_marginBottom="3dp"
             android:background="@drawable/border_transactions"
             android:orientation="vertical"
-            android:padding="3dp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#C0C0C0"
                 android:textStyle="bold"
+                android:textSize="15sp"
                 android:labelFor="@+id/tvNumberOfPersons"
                 android:text="No. of Persons" />
+
             <TextView
                 android:id="@+id/tvNumberOfPersons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-                android:textColor="#C0C0C0"
                 android:text="10"
-                android:textStyle="bold"
-                android:textSize="19sp" />
+                android:textColor="#C0C0C0"
+
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
             <View
@@ -157,7 +163,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="10dp"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
             android:background="@drawable/border_transactions"
@@ -165,30 +171,34 @@
 
 
             <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#C0C0C0"
-                android:textStyle="bold"
                 android:gravity="center"
-                android:text="Ticket Price" />
+                android:textSize="15sp"
+                android:text="Ticket Price"
+                android:textColor="#C0C0C0"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/tvCPPP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".40"
                 android:layout_marginLeft="25dp"
-                android:textSize="19sp"
                 android:gravity="center"
+                android:textSize="20sp"
                 android:textColor="#C0C0C0"
                 android:text="20"
                 android:textStyle="bold"
 
                 />
 
+        </LinearLayout>
+
 
         </LinearLayout>
 
-        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

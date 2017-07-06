@@ -59,7 +59,7 @@
         android:layout_marginLeft="20dp"
         android:textColor="#fff"
         android:layout_height="wrap_content"
-        android:text="Busses" />
+        android:text="Drivers" />
 
     <Spinner
         android:id="@+id/terminal"
@@ -72,12 +72,34 @@
 
         android:layout_marginRight="10dp" />
 
+    <TextView
+        android:id="@+id/pin"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:textColor="#fff"
+        android:layout_height="wrap_content"
+        android:text="Pin COde" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textColor="#fff"
+        android:id="@+id/pincode"
+
+        />
+
     <Button
         android:id="@+id/button"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="21dp"
-        android:layout_marginTop="70dp"
-        android:text="save" />
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="save"
+        android:textColor="#fff"
+        android:textSize="30sp" />
+
+
 </LinearLayout>

@@ -2,13 +2,19 @@ package com.epay.validator.validator_epay.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,11 +43,12 @@ public class Transactions extends AppCompatActivity  {
     String[] customer_id;
     ArrayList<String> trans_id,amountPaid;
     private ListView ListView;
+    AlertDialog myalertdialog;
     private List<TransactionData> TransactionList = new ArrayList<TransactionData>();
     CustomTransactionListAdapter adapter;
     Button sync;
     ProgressDialog ringProgressDialog;
-    String route_id,from,to,no_of_persons;
+    String route_id,from,to,no_of_persons,date;
     static  int count =0;
     HashMap<Integer,ArrayList<String>> data = new HashMap<>();
     @Override
@@ -65,12 +72,14 @@ public class Transactions extends AppCompatActivity  {
             to=dbManager.h_fetch_route_table_dest(route_id);
             from=dbManager.h_fetch_route_table_start(route_id);
             no_of_persons=dbManager.fetch_no_of_persons(trans_id.get(i));
+            date=dbManager.fetch_date(trans_id.get(i));
 
             TransactionData hd = new TransactionData();
             hd.setCustomer_id(customer_id[0]);
             hd.setTrans_id(trans_id.get(i));
             hd.setFare_Price(amountPaid.get(i));
             hd.setRouteStart(from);
+            hd.setDate(date);
             hd.setRoute_destinition(to);
             hd.setPersonTravelling(no_of_persons);
             TransactionList.add(hd);
@@ -83,21 +92,53 @@ public class Transactions extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
 
-                if(isNetworkAvailable())
-                {
+                SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo",MODE_PRIVATE);
+                final String  pin = sharedPreferences.getString("Pincode","");
 
-                    data=  dbManager.fetch_trans();
-                    if(data.size() >0)
-                    {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Transactions.this);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                View dialogView = inflater.inflate(R.layout.dailog_pincode, null);
+                builder.setView(dialogView);
 
-                            syncData(data.get(count));
+                final EditText code = (EditText) dialogView.findViewById(R.id.code);
+                Button send = (Button) dialogView.findViewById(R.id.send);
+
+                send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+
+                    public void onClick(View view) {
+
+                        if (code.getText().toString().equals(pin)) {
+                            if (isNetworkAvailable()) {
+
+                                myalertdialog.dismiss();
+                                data = dbManager.fetch_trans();
+                                if (data.size() > 0) {
+
+                                    syncData(data.get(count));
+
+                                } else {
+                                    Toast.makeText(Transactions.this, "No Data To Sycn", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                            else
+                            {
+                                Toast.makeText(Transactions.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                       else
+                        {
+                            Toast.makeText(Transactions.this, "Wrong Pin Enter", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
-                    else {
-                        Toast.makeText(Transactions.this, "No Data To Sycn", Toast.LENGTH_SHORT).show();
-                    }
+                });
 
-                }
+                myalertdialog = builder.create();
+                myalertdialog.show();
+
+
             }
         });
 
@@ -105,6 +146,19 @@ public class Transactions extends AppCompatActivity  {
         adapter = new CustomTransactionListAdapter(Transactions.this,TransactionList);
         ListView.setAdapter(adapter);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 
     private boolean isNetworkAvailable() {
