@@ -93,9 +93,9 @@ public class User_Info extends AppCompatActivity {
                 if(pincodelist.get(id).equals(pincode.getText().toString()))
                 {
                     editor.putString("stakeholder",stakeID_list.get((int) stakeholder.getSelectedItemId()));
-                    editor.putString("operator",opId_list.get((int) stakeholder.getSelectedItemId()));
-                    editor.putString("buss",bussId_list.get((int) stakeholder.getSelectedItemId()));
-                        editor.putString("Pincode",pincodelist.get(id));
+                    editor.putString("operator",opId_list.get((int) opperator.getSelectedItemId()));
+                    editor.putString("buss",bussId_list.get((int) terminal.getSelectedItemId()));
+                    editor.putString("Pincode",pincodelist.get(id));
                     editor.putString("is_first","true");
 
                     editor.apply();

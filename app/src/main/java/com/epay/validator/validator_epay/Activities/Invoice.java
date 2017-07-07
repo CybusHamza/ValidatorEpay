@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.pt.printer.Printer;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -148,9 +149,9 @@ public class Invoice extends AppCompatActivity {
                     .setDataFields(Arrays.asList(0l))
                     .build();
             // Change the layout below for other beacon types
-            BeaconParser beaconParser = new BeaconParser()
+            final BeaconParser beaconParser = new BeaconParser()
                     .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-            BeaconTransmitter beaconTransmitter = new BeaconTransmitter(Invoice.this, beaconParser);
+            final BeaconTransmitter beaconTransmitter = new BeaconTransmitter(Invoice.this, beaconParser);
             beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
             beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
             beaconTransmitter.startAdvertising(beacon, new AdvertiseCallback() {
@@ -165,6 +166,16 @@ public class Invoice extends AppCompatActivity {
                     Log.i("Beacon", "Advertisement start succeeded. " + settingsInEffect);
                 }
             });
+
+            new CountDownTimer(10000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                }
+
+                public void onFinish() {
+                    beaconTransmitter.stopAdvertising();
+                 }
+            }.start();
 
 
             print = (Button) findViewById(R.id.print);
