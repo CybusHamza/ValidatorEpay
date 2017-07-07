@@ -110,7 +110,7 @@ public class Invoice extends AppCompatActivity {
         }
         name = i.getStringExtra("name");
         number = i.getStringExtra("number");
-        int total = Integer.valueOf(fare) * Integer.valueOf(no_of_persons);
+        int total = Integer.valueOf(fare) /Integer.valueOf(no_of_persons);
         Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
         QRCodeEncoder qrCodeEncoder = new QRCodeEncoder(Qrsting,
                 null,
@@ -133,10 +133,10 @@ public class Invoice extends AppCompatActivity {
         From.setText(from);
         To.setText(to);
         FareType.setText(fareType);
-        FarePrice.setText(fare);
+        FarePrice.setText(total+"");
         No_Of_Persons.setText(no_of_persons);
-        Total.setText("$" + String.valueOf(total));
-        Net.setText("$" + String.valueOf(total));
+        Total.setText("₦" + String.valueOf(fare));
+        Net.setText("₦" + String.valueOf(fare));
         CustomerName.setText(name);
         Contact.setText(number);
         if (checkPrerequisites()) {
@@ -167,7 +167,7 @@ public class Invoice extends AppCompatActivity {
                 }
             });
 
-            new CountDownTimer(10000, 1000) {
+            new CountDownTimer(20000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
                 }
@@ -201,7 +201,7 @@ public class Invoice extends AppCompatActivity {
 
 
                         Toast.makeText(Invoice.this, "open fail !!", Toast.LENGTH_SHORT).show();
-
+                        printer.setBold(true);
                         open_flg = false;
 
                     }
@@ -218,24 +218,27 @@ public class Invoice extends AppCompatActivity {
                     printer.printPictureByRelativePath("/res/drawable/trans.png", 70, 70);
                     printer.printString(line);
                     printer.setAlignment(0);
-                    printer.printString("Date : " + currentDateTimeString);
+                    printer.printString("Date : " + date.getText().toString());
                     printer.setAlignment(1);
                     printer.printQR(Qrsting, 4);
                     printer.printString(" ");
                     printer.setAlignment(0);
                     printer.setLeftMargin(2);
                     printer.printString("Customer : " + CustomerName.getText().toString());
-                    printer.printString("Date     : " + date.getText().toString());
                     printer.printString("Trans Id : " + TransactionId.getText().toString());
-                    printer.printString("Fair : " + Total.getText().toString());
+                    printer.printString("Fare : " + Total.getText().toString());
                     printer.printString("From : " + From.getText().toString());
                     printer.printString("To   : " + To.getText().toString());
                     printer.setLeftMargin(0);
                     printer.printString(line);
                     printer.setAlignment(0);
                     printer.printString(" ");
-                    printer.printString("Buss id : 1204");
-                    printer.printString("Driver  : Rizwan Ahmed");
+                    printer.setAlignment(1);
+                    printer.setBold(true);
+                    printer.printString("powered by Epayplus");
+                    printer.printString(" ");
+                    printer.printString(" ");
+
 
                     printer.close();
 

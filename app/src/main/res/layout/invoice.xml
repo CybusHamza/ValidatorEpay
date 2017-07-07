@@ -3,24 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/border">
+    android:orientation="vertical">
     <include
         android:id="@+id/app_bar_history"
         layout="@layout/app_bar">
     </include>
 
-    <Button
-        android:id="@+id/print"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Print Invoice"
-        android:textSize="25sp"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="15dp"
-        android:layout_marginStart="15dp"
+        android:background="@drawable/border"
+        android:padding="15dp"
+
         android:orientation="vertical">
 
         <TextView
@@ -293,6 +288,21 @@
             </TableLayout>
         </ScrollView>
     </RelativeLayout>
+
+
+
+        <Button
+            android:id="@+id/print"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Invoice"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center_horizontal|center"
+            android:textSize="25sp" />
+
+
 
 
 </LinearLayout>
