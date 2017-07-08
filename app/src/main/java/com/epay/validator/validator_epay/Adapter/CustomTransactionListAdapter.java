@@ -9,10 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.epay.validator.validator_epay.R;
+import com.epay.validator.validator_epay.pojo.TransactionData;
 
 import java.util.List;
-
-import com.epay.validator.validator_epay.pojo.TransactionData;
 
 /**
  * Created by AQSA SHaaPARR on 4/18/2017.
@@ -71,10 +70,11 @@ public class CustomTransactionListAdapter extends BaseAdapter {
        // tvDate.setText(historyData.getCustomer_id());
         tvTransId.setText(historyData.getTrans_id());
         // tvCharge.setText("$"+historyData.getFare_Price());
-        int totalFare = Integer.valueOf(historyData.getFare_Price()) * Integer.valueOf( historyData.getPersonTravelling());
+        int totalFare = Integer.valueOf(historyData.getFare_Price()) / Integer.valueOf( historyData.getPersonTravelling());
+        int total =totalFare* Integer.valueOf( historyData.getPersonTravelling());
 
-        tvCharge.setText("$"+ String.valueOf(totalFare));
-        tvCpp.setText("$"+historyData.getFare_Price());
+        tvCharge.setText("₦"+ total);
+        tvCpp.setText("₦"+totalFare);
         tvDestinition.setText( historyData.getRoute_destinition());
         tvStart.setText(historyData.getRouteStart());
         tvPersons.setText(historyData.getPersonTravelling());

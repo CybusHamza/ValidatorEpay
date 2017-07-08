@@ -208,12 +208,15 @@ public class Transactions extends AppCompatActivity  {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
+
+                SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo",MODE_PRIVATE);
+
                 map.put("customer_id",transId.get(1));
                 map.put("fare_type_id",transId.get(2));
                 map.put("route_id",transId.get(3));
-                map.put("bus_type_id",transId.get(4));
-                map.put("terminal_id",transId.get(5));
-                map.put("operator_id",transId.get(6));
+                map.put("bus_type_id",sharedPreferences.getString("",""));
+                map.put("terminal_id",sharedPreferences.getString("buss",""));
+                map.put("operator_id",sharedPreferences.getString("operator",""));
                 map.put("amount_paid",transId.get(7));
                 map.put("fee_paid",transId.get(8));
                 map.put("currency",transId.get(9));
