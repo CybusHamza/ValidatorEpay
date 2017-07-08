@@ -115,7 +115,7 @@ public class Transactions extends AppCompatActivity  {
                                 data = dbManager.fetch_trans();
                                 if (data.size() > 0) {
 
-                                    syncData(data.get(count));
+                                    syncData(data.get(0));
 
                                 } else {
                                     Toast.makeText(Transactions.this, "No Data To Sycn", Toast.LENGTH_SHORT).show();
@@ -214,12 +214,12 @@ public class Transactions extends AppCompatActivity  {
                 map.put("customer_id",transId.get(1));
                 map.put("fare_type_id",transId.get(2));
                 map.put("route_id",transId.get(3));
-                map.put("bus_type_id",sharedPreferences.getString("",""));
+                map.put("bus_type_id",sharedPreferences.getString("abc","1"));
                 map.put("terminal_id",sharedPreferences.getString("buss",""));
                 map.put("operator_id",sharedPreferences.getString("operator",""));
                 map.put("amount_paid",transId.get(7));
                 map.put("fee_paid",transId.get(8));
-                map.put("currency",transId.get(9));
+                map.put("currency","171");
                 map.put("trans_status_id",transId.get(10));
                 map.put("paid_date",transId.get(11));
                 map.put("trans_date",transId.get(12));

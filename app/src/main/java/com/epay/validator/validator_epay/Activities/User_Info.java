@@ -38,8 +38,14 @@ import java.util.Map;
 
 public class User_Info extends AppCompatActivity {
 
-    Spinner stakeholder,opperator,terminal;
     private static final int MY_SOCKET_TIMEOUT_MS = 10000;
+    Spinner stakeholder, opperator, terminal;
+    String client_id, operator_id;
+    Button Save;
+    EditText pincode;
+    Toolbar toolbar;
+    String is_first;
+    ProgressDialog ringProgressDialog;
     private List<String> stake_list;
     private List<String> stakeID_list;
     private List<String> op_list;
@@ -47,76 +53,75 @@ public class User_Info extends AppCompatActivity {
     private List<String> buss_list;
     private List<String> bussId_list;
     private List<String> pincodelist;
-    String client_id,operator_id;
-    Button Save;
-    EditText pincode;
-    Toolbar toolbar;
-    String  is_first;
-    ProgressDialog ringProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user__info);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
-        is_first = sharedPreferences.getString("is_first","false");
+        is_first = sharedPreferences.getString("is_first", "false");
 
-        if(is_first.equals("true"))
-        {
-            Intent intent = new Intent(User_Info.this,MainActivity.class);
+        if (is_first.equals("true")) {
+            Intent intent = new Intent(User_Info.this, MainActivity.class);
             finish();
             startActivity(intent);
-        }
-        else {
+        } else {
 
-        stakeholder = (Spinner) findViewById(R.id.stakeholder);
-        opperator = (Spinner) findViewById(R.id.opperator);
-        terminal = (Spinner) findViewById(R.id.terminal);
-        Save = (Button) findViewById(R.id.button);
-        pincode = (EditText) findViewById(R.id.pincode);
-
+            stakeholder = (Spinner) findViewById(R.id.stakeholder);
+            opperator = (Spinner) findViewById(R.id.opperator);
+            terminal = (Spinner) findViewById(R.id.terminal);
+            Save = (Button) findViewById(R.id.button);
+            pincode = (EditText) findViewById(R.id.pincode);
 
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        toolbar.setTitle("Select Information");
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.back);
+            toolbar = (Toolbar) findViewById(R.id.app_bar);
+            toolbar.setTitle("Select Information");
+            setSupportActionBar(toolbar);
+            toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back);
 
-        Save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int id = (int) terminal.getSelectedItemId();
-                if(pincodelist.get(id).equals(pincode.getText().toString()))
-                {
-                    editor.putString("stakeholder",stakeID_list.get((int) stakeholder.getSelectedItemId()));
-                    editor.putString("operator",opId_list.get((int) opperator.getSelectedItemId()));
-                    editor.putString("buss",bussId_list.get((int) terminal.getSelectedItemId()));
-                    editor.putString("Pincode",pincodelist.get(id));
-                    editor.putString("is_first","true");
+            Save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int id = (int) terminal.getSelectedItemId();
+                    if (!opperator.getSelectedItem().toString().equals("No Records Founds")) {
+                        if (!terminal.getSelectedItem().toString().equals("No Records Founds")) {
 
-                    editor.apply();
 
-                    Intent intent = new Intent(User_Info.this,MainActivity.class);
-                    finish();
-                    startActivity(intent);
+                            if (pincodelist.get(id).equals(pincode.getText().toString())) {
+                                editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
+                                editor.putString("operator", opId_list.get((int) opperator.getSelectedItemId()));
+                                editor.putString("buss", bussId_list.get((int) terminal.getSelectedItemId()));
+                                editor.putString("Pincode", pincodelist.get(id));
+                                editor.putString("is_first", "true");
+
+                                editor.apply();
+
+                                Intent intent = new Intent(User_Info.this, MainActivity.class);
+                                finish();
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(User_Info.this, "Please Enter Valid Pin Code", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(User_Info.this, "Please Select Driver", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else {
+                        Toast.makeText(User_Info.this, "Please Select Operator", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
                 }
+            });
+            stakeholder.setOnItemSelectedListener(new CustomOnItemSelectedListener_stake());
+            opperator.setOnItemSelectedListener(new CustomOnItemSelectedListener_operator());
 
-                else
-                {
-                    Toast.makeText(User_Info.this, "Please Enter Valid Pin Code", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-        });
-        stakeholder.setOnItemSelectedListener(new CustomOnItemSelectedListener_stake());
-        opperator.setOnItemSelectedListener(new CustomOnItemSelectedListener_operator());
-
-         Allstakeholder();
+            Allstakeholder();
         }
     }
 
@@ -138,8 +143,7 @@ public class User_Info extends AppCompatActivity {
                             stakeID_list = new ArrayList<>();
 
                             jsonArray = new JSONArray(response);
-                            for (int i=0; i<jsonArray.length();i++)
-                            {
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
                                 stake_list.add(jsonObject.getString("first_name") + jsonObject.getString("last_name"));
                                 stakeID_list.add(jsonObject.getString("stakeholder_id"));
@@ -147,15 +151,13 @@ public class User_Info extends AppCompatActivity {
                             }
 
                             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
-                                    (User_Info.this, R.layout.spinner_item,stake_list);
+                                    (User_Info.this, R.layout.spinner_item, stake_list);
 
                             dataAdapter.setDropDownViewResource
                                     (android.R.layout.simple_spinner_dropdown_item);
 
                             stakeholder.setAdapter(dataAdapter);
-                        }
-
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
@@ -210,21 +212,17 @@ public class User_Info extends AppCompatActivity {
                             op_list = new ArrayList<>();
                             opId_list = new ArrayList<>();
 
-                            if(resp.equals("false"))
-                            {
+                            if (resp.equals("false")) {
                                 op_list.add("No Records Founds");
                                 opId_list.add("0");
 
-                            }
-                            else
-                            {
+                            } else {
 
 
                                 jsonArray = new JSONArray(response);
-                                for (int i=0; i<jsonArray.length();i++)
-                                {
+                                for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
-                                    op_list.add(jsonObject.getString("opr_name") );
+                                    op_list.add(jsonObject.getString("opr_name"));
                                     opId_list.add(jsonObject.getString("id"));
 
                                 }
@@ -232,15 +230,13 @@ public class User_Info extends AppCompatActivity {
                             }
 
                             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
-                                    (User_Info.this, R.layout.spinner_item,op_list);
+                                    (User_Info.this, R.layout.spinner_item, op_list);
 
                             dataAdapter.setDropDownViewResource
                                     (android.R.layout.simple_spinner_dropdown_item);
 
                             opperator.setAdapter(dataAdapter);
-                        }
-
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
@@ -264,7 +260,7 @@ public class User_Info extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("id",client_id);
+                params.put("id", client_id);
                 return params;
             }
         };
@@ -277,62 +273,6 @@ public class User_Info extends AppCompatActivity {
         requestQueue.add(request);
 
     }
-
-
-    private class CustomOnItemSelectedListener_stake implements AdapterView.OnItemSelectedListener {
-
-        public void onItemSelected(AdapterView<?> parent, View view, final int pos,
-                                   long id) {
-
-            if (stake_list.get(pos).equals("No Records Founds")) {
-                client_id = "0";
-            } else {
-                client_id = stakeID_list.get(pos);
-
-            }
-            if (!stake_list.get(pos).equals("Select")) {
-                getTemplates();
-            }
-            else
-                Toast.makeText(User_Info.this,"Plz select Stake Holder",Toast.LENGTH_LONG).show();
-
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
-
-        }
-
-    }
-
-    private class CustomOnItemSelectedListener_operator implements AdapterView.OnItemSelectedListener {
-
-        public void onItemSelected(AdapterView<?> parent, View view, final int pos,
-                                   long id) {
-
-            if (op_list.get(pos).equals("No Records Founds")) {
-                operator_id = "0";
-            } else {
-                operator_id = opId_list.get(pos);
-
-            }
-            if (!op_list.get(pos).equals("Select")) {
-                getvehicles();
-            }
-            else
-                Toast.makeText(User_Info.this,"Plz select client",Toast.LENGTH_LONG).show();
-
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
-
-        }
-
-    }
-
 
     public void getvehicles() {
 
@@ -354,37 +294,31 @@ public class User_Info extends AppCompatActivity {
                         bussId_list = new ArrayList<>();
                         pincodelist = new ArrayList<>();
 
-                        if(resp.equals("false"))
-                        {
+                        if (resp.equals("false")) {
                             buss_list.add("No Records Founds");
                             bussId_list.add("0");
                             pincodelist.add("0");
 
-                        }
-
-                        else
-                        {
+                        } else {
                             try {
 
                                 jsonArray = new JSONArray(response);
-                                for (int i=0; i<jsonArray.length();i++)
-                                {
+                                for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
-                                    buss_list.add(jsonObject.getString("driver_name") );
+                                    buss_list.add(jsonObject.getString("driver_name"));
                                     bussId_list.add(jsonObject.getString("driver_id"));
                                     pincodelist.add(jsonObject.getString("driver_pin_code"));
 
                                 }
 
-                            }
-                            catch (JSONException e) {
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
                         }
 
                         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
-                                (User_Info.this,  R.layout.spinner_item,buss_list);
+                                (User_Info.this, R.layout.spinner_item, buss_list);
 
                         dataAdapter.setDropDownViewResource
                                 (android.R.layout.simple_spinner_dropdown_item);
@@ -413,7 +347,7 @@ public class User_Info extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("Terminal_id",operator_id);
+                params.put("Terminal_id", operator_id);
                 return params;
             }
         };
@@ -424,6 +358,58 @@ public class User_Info extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(User_Info.this);
         requestQueue.add(request);
+
+    }
+
+    private class CustomOnItemSelectedListener_stake implements AdapterView.OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent, View view, final int pos,
+                                   long id) {
+
+            if (stake_list.get(pos).equals("No Records Founds")) {
+                client_id = "0";
+            } else {
+                client_id = stakeID_list.get(pos);
+
+            }
+            if (!stake_list.get(pos).equals("Select")) {
+                getTemplates();
+            } else
+                Toast.makeText(User_Info.this, "Plz select Stake Holder", Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+    }
+
+    private class CustomOnItemSelectedListener_operator implements AdapterView.OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent, View view, final int pos,
+                                   long id) {
+
+            if (op_list.get(pos).equals("No Records Founds")) {
+                operator_id = "0";
+            } else {
+                operator_id = opId_list.get(pos);
+
+            }
+            if (!op_list.get(pos).equals("Select")) {
+                getvehicles();
+            } else
+                Toast.makeText(User_Info.this, "Plz select client", Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+            // TODO Auto-generated method stub
+
+        }
 
     }
 

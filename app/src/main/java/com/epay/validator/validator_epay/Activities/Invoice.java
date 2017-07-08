@@ -224,9 +224,9 @@ public class Invoice extends AppCompatActivity {
                     printer.printString("TRXN Date : " + date.getText().toString());
                     printer.setLeftMargin(2);
                     printer.printString("Customer : " + CustomerName.getText().toString());
-                    printer.printString("Trans Id : " + TransactionId.getText().toString());
+                    printer.printString("TRXN Id : " + TransactionId.getText().toString());
                     printer.printString("Fare :  NGN " + Total.getText().toString());
-                    printer.printString("Person Travling : " + No_Of_Persons.getText().toString());
+                    printer.printString("Person Travelling : " + No_Of_Persons.getText().toString());
                     printer.printString("From : " + From.getText().toString());
                     printer.printString("To   : " + To.getText().toString());
                     printer.setLeftMargin(0);
