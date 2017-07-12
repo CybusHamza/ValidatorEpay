@@ -74,6 +74,7 @@ public class Transactions extends AppCompatActivity  {
             no_of_persons=dbManager.fetch_no_of_persons(trans_id.get(i));
             date=dbManager.fetch_date(trans_id.get(i));
 
+            count = 0;
             TransactionData hd = new TransactionData();
             hd.setCustomer_id(customer_id[0]);
             hd.setTrans_id(trans_id.get(i));
@@ -111,6 +112,7 @@ public class Transactions extends AppCompatActivity  {
                         if (code.getText().toString().equals(pin)) {
                             if (isNetworkAvailable()) {
 
+                                count = 0 ;
                                 myalertdialog.dismiss();
                                 data = dbManager.fetch_trans();
                                 if (data.size() > 0) {
