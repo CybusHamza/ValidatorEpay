@@ -53,6 +53,9 @@ public class User_Info extends AppCompatActivity {
     private List<String> buss_list;
     private List<String> bussId_list;
     private List<String> pincodelist;
+    private List<String> busRegistrationList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,7 @@ public class User_Info extends AppCompatActivity {
                                 editor.putString("operator", opId_list.get((int) opperator.getSelectedItemId()));
                                 editor.putString("buss", bussId_list.get((int) terminal.getSelectedItemId()));
                                 editor.putString("Pincode", pincodelist.get(id));
+                                editor.putString("busNumber",busRegistrationList.get(id));
                                 editor.putString("is_first", "true");
 
                                 editor.apply();
@@ -293,6 +297,8 @@ public class User_Info extends AppCompatActivity {
                         buss_list = new ArrayList<>();
                         bussId_list = new ArrayList<>();
                         pincodelist = new ArrayList<>();
+                        busRegistrationList = new ArrayList<>();
+
 
                         if (resp.equals("false")) {
                             buss_list.add("No Records Founds");
@@ -308,6 +314,7 @@ public class User_Info extends AppCompatActivity {
                                     buss_list.add(jsonObject.getString("driver_name"));
                                     bussId_list.add(jsonObject.getString("driver_id"));
                                     pincodelist.add(jsonObject.getString("driver_pin_code"));
+                                    busRegistrationList.add(jsonObject.getString("Bus_Number"));
 
                                 }
 

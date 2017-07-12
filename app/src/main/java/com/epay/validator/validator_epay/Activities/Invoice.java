@@ -241,6 +241,7 @@ public class Invoice extends AppCompatActivity {
 
 
                     printer.close();
+                    finish();
 
 
                 }
