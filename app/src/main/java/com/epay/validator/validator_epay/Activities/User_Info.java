@@ -39,7 +39,7 @@ import java.util.Map;
 public class User_Info extends AppCompatActivity {
 
     private static final int MY_SOCKET_TIMEOUT_MS = 10000;
-    Spinner stakeholder, opperator, terminal;
+    Spinner stakeholder, opperator, terminal,allTerminals;
     String client_id, operator_id;
     Button Save;
     EditText pincode;
@@ -54,6 +54,12 @@ public class User_Info extends AppCompatActivity {
     private List<String> bussId_list;
     private List<String> pincodelist;
     private List<String> busRegistrationList;
+    private List<String> commissionList;
+    private List<String> commissionTypeList;
+    private List<String> terminalList;
+    private List<String> terminalIdList;
+    private List<String> terminalStanList;
+    private List<String> managerCodeList;
 
 
 
@@ -75,6 +81,7 @@ public class User_Info extends AppCompatActivity {
             stakeholder = (Spinner) findViewById(R.id.stakeholder);
             opperator = (Spinner) findViewById(R.id.opperator);
             terminal = (Spinner) findViewById(R.id.terminal);
+            allTerminals = (Spinner) findViewById(R.id.terminalSpinner);
             Save = (Button) findViewById(R.id.button);
             pincode = (EditText) findViewById(R.id.pincode);
 
@@ -96,6 +103,8 @@ public class User_Info extends AppCompatActivity {
 
                             if (pincodelist.get(id).equals(pincode.getText().toString())) {
                                 editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
+                                editor.putString("commission",commissionList.get((int) stakeholder.getSelectedItemId()));
+                                editor.putString("commissionType",commissionTypeList.get((int) stakeholder.getSelectedItemId()));
                                 editor.putString("operator", opId_list.get((int) opperator.getSelectedItemId()));
                                 editor.putString("buss", bussId_list.get((int) terminal.getSelectedItemId()));
                                 editor.putString("Pincode", pincodelist.get(id));
@@ -145,12 +154,16 @@ public class User_Info extends AppCompatActivity {
                         try {
                             stake_list = new ArrayList<>();
                             stakeID_list = new ArrayList<>();
+                            commissionList = new ArrayList<>();
+                            commissionTypeList = new ArrayList<>();
 
                             jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
                                 stake_list.add(jsonObject.getString("first_name") + jsonObject.getString("last_name"));
                                 stakeID_list.add(jsonObject.getString("stakeholder_id"));
+                                commissionList.add(jsonObject.getString("commission"));
+                                commissionTypeList.add(jsonObject.getString("commission_type"));
 
                             }
 
@@ -290,6 +303,7 @@ public class User_Info extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         ringProgressDialog.dismiss();
+                        //getTerminals();
                         JSONArray jsonArray = null;
 
                         String resp = response.trim();
@@ -355,6 +369,94 @@ public class User_Info extends AppCompatActivity {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("Terminal_id", operator_id);
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue requestQueue = Volley.newRequestQueue(User_Info.this);
+        requestQueue.add(request);
+
+    }
+
+    public void getTerminals() {
+
+        ringProgressDialog = ProgressDialog.show(User_Info.this, "", "Please wait ...", true);
+        ringProgressDialog.setCancelable(false);
+        ringProgressDialog.show();
+
+        StringRequest request = new StringRequest(Request.Method.POST, End_Points.GET_TERMINALS,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        ringProgressDialog.dismiss();
+                        JSONArray jsonArray = null;
+
+                        String resp = response.trim();
+                        terminalList = new ArrayList<>();
+                        terminalIdList = new ArrayList<>();
+                        terminalStanList = new ArrayList<>();
+                        managerCodeList = new ArrayList<>();
+                        if (resp.equals("false")) {
+                            terminalList.add("No Records Founds");
+                            terminalIdList.add("0");
+                            terminalStanList.add("0");
+                            managerCodeList.add("0");
+
+                        }else {
+                            try {
+
+                                jsonArray = new JSONArray(response);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
+                                   terminalList.add(jsonObject.getString("terminal_name"));
+                                   terminalIdList.add(jsonObject.getString("terminal_id"));
+                                   terminalStanList.add(jsonObject.getString("terminal_stan"));
+                                   managerCodeList.add(jsonObject.getString("manager_password"));
+
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+
+                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+                                (User_Info.this, R.layout.spinner_item, terminalList);
+
+                        dataAdapter.setDropDownViewResource
+                                (android.R.layout.simple_spinner_dropdown_item);
+
+                        allTerminals.setAdapter(dataAdapter);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                ringProgressDialog.dismiss();
+                if (error instanceof NoConnectionError) {
+
+                    Toast.makeText(User_Info.this, "No connection Error", Toast.LENGTH_SHORT).show();
+
+                } else if (error instanceof TimeoutError) {
+
+                    Toast.makeText(User_Info.this, " connection Time out Error", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+               params.put("Terminal_id", operator_id);
                 return params;
             }
         };

@@ -187,10 +187,9 @@ public class Transactions extends AppCompatActivity  {
                 {   ++count;
                     syncData(data.get(count));
                     dbManager.deletetrans(Long.parseLong(transId.get(0)));
+
+                    //if()
                 }
-
-
-
 
             }
 
@@ -212,6 +211,7 @@ public class Transactions extends AppCompatActivity  {
                 Map<String, String> map = new HashMap<String, String>();
 
                 SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo",MODE_PRIVATE);
+                float commission = 0;
 
                 map.put("customer_id",transId.get(1));
                 map.put("fare_type_id",transId.get(2));
@@ -226,6 +226,14 @@ public class Transactions extends AppCompatActivity  {
                 map.put("paid_date",transId.get(11));
                 map.put("trans_date",transId.get(12));
                 map.put("cancel_date",transId.get(13));
+                if(sharedPreferences.getString("commissionType","").equals("1")){
+                    String personTraveling=dbManager.fetch_no_of_persons(transId.get(10));
+                    commission=Integer.parseInt(sharedPreferences.getString("commission",""))*Integer.parseInt(personTraveling);
+                }else if(sharedPreferences.getString("commissionType","").equals("2")){
+                    commission=Integer.parseInt(transId.get(7))*(Integer.parseInt(sharedPreferences.getString("commission",""))/100);
+                }
+                map.put("commission_type",sharedPreferences.getString("commissionType",""));
+                map.put("commission", String.valueOf(commission));
                 return map;
             }
         };
