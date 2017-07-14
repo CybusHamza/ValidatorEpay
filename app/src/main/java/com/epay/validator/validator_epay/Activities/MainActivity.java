@@ -232,8 +232,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.setLeftMargin(2);
                 printer.printString("Customer : " + name);
                 printer.printString("TRXN Id : " +transId);
-                printer.printString("Fare :  NGN " + total);
-                printer.printString("Person Travelling : " + no_of_persons);
+                printer.printString("Tariff :  NGN " + total);
+                printer.printString("No. of Tickets : " + no_of_persons);
+                printer.printString("Total : NGN " + fare);
                 printer.printString("From : " + from);
                 printer.printString("To   : " + to);
                 printer.printString("Bus No. : " + busNumber);

@@ -76,7 +76,8 @@
         android:layout_marginLeft="20dp"
         android:textColor="#fff"
         android:layout_height="wrap_content"
-        android:text="Terminal" />
+        android:text="Terminal"
+        android:visibility="invisible"/>
 
     <Spinner
         android:id="@+id/terminalSpinner"
@@ -86,7 +87,8 @@
         android:layout_margin="20dp"
         android:layout_marginLeft="10dp"
         android:background="@drawable/dropdown_mainscreen"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/pin"
@@ -113,7 +115,8 @@
         android:layout_marginLeft="20dp"
         android:textColor="#fff"
         android:layout_height="wrap_content"
-        android:text="Terminal Manager Pin Code" />
+        android:text="Terminal Manager Pin Code"
+        android:visibility="invisible"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -124,6 +127,7 @@
         android:maxLength="4"
         android:id="@+id/pincodeTManager"
         android:inputType="numberPassword"
+        android:visibility="invisible"
 
         />
     <Button
