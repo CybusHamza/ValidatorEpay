@@ -104,6 +104,7 @@
         android:layout_margin="10dp"
         android:textColor="#fff"
         android:maxEms="4"
+        android:maxLength="8"
         android:id="@+id/pincode"
         android:inputType="numberPassword"
         />
@@ -121,6 +122,7 @@
         android:layout_margin="10dp"
         android:textColor="#fff"
         android:maxEms="4"
+        android:maxLength="8"
         android:id="@+id/pincodeTManager"
         android:inputType="numberPassword"
 
