@@ -42,7 +42,7 @@ public class User_Info extends AppCompatActivity {
     Spinner stakeholder, opperator, terminal,allTerminals;
     String client_id, operator_id;
     Button Save;
-    EditText pincode;
+    EditText pincode,managercode;
     Toolbar toolbar;
     String is_first;
     ProgressDialog ringProgressDialog;
@@ -84,6 +84,7 @@ public class User_Info extends AppCompatActivity {
             allTerminals = (Spinner) findViewById(R.id.terminalSpinner);
             Save = (Button) findViewById(R.id.button);
             pincode = (EditText) findViewById(R.id.pincode);
+            managercode = (EditText) findViewById(R.id.pincodeTManager);
 
 
             toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -99,25 +100,33 @@ public class User_Info extends AppCompatActivity {
                     int id = (int) terminal.getSelectedItemId();
                     if (!opperator.getSelectedItem().toString().equals("No Records Founds")) {
                         if (!terminal.getSelectedItem().toString().equals("No Records Founds")) {
-
-
+                            if (!allTerminals.getSelectedItem().toString().equals("No Records Founds")) {
                             if (pincodelist.get(id).equals(pincode.getText().toString())) {
-                                editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
-                                editor.putString("commission",commissionList.get((int) stakeholder.getSelectedItemId()));
-                                editor.putString("commissionType",commissionTypeList.get((int) stakeholder.getSelectedItemId()));
-                                editor.putString("operator", opId_list.get((int) opperator.getSelectedItemId()));
-                                editor.putString("buss", bussId_list.get((int) terminal.getSelectedItemId()));
-                                editor.putString("Pincode", pincodelist.get(id));
-                                editor.putString("busNumber",busRegistrationList.get(id));
-                                editor.putString("is_first", "true");
-
-                                editor.apply();
+                                if(managerCodeList.get((int) allTerminals.getSelectedItemId()).equals(managercode.getText().toString())){
+                                    editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
+                                    editor.putString("commission",commissionList.get((int) stakeholder.getSelectedItemId()));
+                                    editor.putString("commissionType",commissionTypeList.get((int) stakeholder.getSelectedItemId()));
+                                    editor.putString("operator", opId_list.get((int) opperator.getSelectedItemId()));
+                                    editor.putString("buss", bussId_list.get((int) terminal.getSelectedItemId()));
+                                    editor.putString("Pincode", pincodelist.get(id));
+                                    editor.putString("busNumber",busRegistrationList.get(id));
+                                    editor.putString("terminalName",allTerminals.getSelectedItem().toString());
+                                    editor.putString("terminalStan",terminalStanList.get((int) allTerminals.getSelectedItemId()));
+                                    editor.putString("managerCode",managerCodeList.get((int) allTerminals.getSelectedItemId()));
+                                    editor.putString("is_first", "true");
+                                    editor.apply();
 
                                 Intent intent = new Intent(User_Info.this, MainActivity.class);
                                 finish();
                                 startActivity(intent);
-                            } else {
+                            }else {
+                                    Toast.makeText(User_Info.this, "Please Enter Valid Terminal Manager Pin Code", Toast.LENGTH_SHORT).show();
+                                }
+                            }else {
                                 Toast.makeText(User_Info.this, "Please Enter Valid Pin Code", Toast.LENGTH_SHORT).show();
+                            }
+                        }else {
+                                Toast.makeText(User_Info.this, "Please Select Terminal", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(User_Info.this, "Please Select Driver", Toast.LENGTH_SHORT).show();
@@ -303,7 +312,7 @@ public class User_Info extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         ringProgressDialog.dismiss();
-                        //getTerminals();
+                        getTerminals();
                         JSONArray jsonArray = null;
 
                         String resp = response.trim();

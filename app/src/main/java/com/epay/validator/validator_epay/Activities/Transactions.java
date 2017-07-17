@@ -50,6 +50,7 @@ public class Transactions extends AppCompatActivity  {
     ProgressDialog ringProgressDialog;
     String route_id,from,to,no_of_persons,date;
     static  int count =0;
+    String stanNumber,managerCode;
     HashMap<Integer,ArrayList<String>> data = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,10 @@ public class Transactions extends AppCompatActivity  {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
+        stanNumber=sharedPreferences.getString("terminalStan","");
+        managerCode=sharedPreferences.getString("managerCode","");
         dbManager = new DBManager(Transactions.this);
         dbManager.open();
         customer_id=dbManager.fetch();
@@ -102,6 +107,7 @@ public class Transactions extends AppCompatActivity  {
                 builder.setView(dialogView);
 
                 final EditText code = (EditText) dialogView.findViewById(R.id.code);
+                final EditText mngrCode = (EditText) dialogView.findViewById(R.id.managercode);
                 Button send = (Button) dialogView.findViewById(R.id.send);
 
                 send.setOnClickListener(new View.OnClickListener() {
@@ -110,9 +116,10 @@ public class Transactions extends AppCompatActivity  {
                     public void onClick(View view) {
 
                         if (code.getText().toString().equals(pin)) {
+                            if (mngrCode.getText().toString().equals(managerCode)) {
                             if (isNetworkAvailable()) {
 
-                                count = 0 ;
+                                count = 0;
                                 myalertdialog.dismiss();
                                 data = dbManager.fetch_trans();
                                 if (data.size() > 0) {
@@ -123,10 +130,11 @@ public class Transactions extends AppCompatActivity  {
                                     Toast.makeText(Transactions.this, "No Data To Sycn", Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else
-                            {
+                            } else {
                                 Toast.makeText(Transactions.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                            }
+                        }else {
+                                Toast.makeText(Transactions.this, "Wrong Manger Pin Entered", Toast.LENGTH_SHORT).show();
                             }
                         }
                        else
@@ -234,6 +242,7 @@ public class Transactions extends AppCompatActivity  {
                 }
                 map.put("commission_type",sharedPreferences.getString("commissionType",""));
                 map.put("commission", String.valueOf(commission));
+                map.put("terminal_stan", stanNumber);
                 return map;
             }
         };

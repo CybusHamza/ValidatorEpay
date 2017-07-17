@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DBManager dbManager;
     android.support.v7.widget.Toolbar toolbar;
      String Qrsting;
-    String busNumber;
+    String busNumber,stanNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
         busNumber=sharedPreferences.getString("busNumber","");
+        stanNumber=sharedPreferences.getString("terminalStan","");
         getLiveData();
 
         checkPrerequisites();
@@ -238,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.printString("From : " + from);
                 printer.printString("To   : " + to);
                 printer.printString("Bus No. : " + busNumber);
+                printer.printString("STAN : " + stanNumber);
                 printer.setLeftMargin(0);
                 printer.printString(line);
                 printer.setAlignment(0);
