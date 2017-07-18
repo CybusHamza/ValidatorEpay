@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
         busNumber=sharedPreferences.getString("busNumber","");
-        stanNumber=sharedPreferences.getString("terminalStan","");
+
         getLiveData();
 
         checkPrerequisites();
@@ -132,6 +132,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // textViewName.setText(result.getContents());
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 }
+                SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
+                final SharedPreferences.Editor editor = sharedPreferences.edit();
+                stanNumber=sharedPreferences.getString("terminalStan","");
+
+                String substrstan1=stanNumber.substring(0,1);
+                int substrstan2=Integer.parseInt(stanNumber.substring(1,6));
+                substrstan2++;
+                String finalstanNumber=substrstan1+String.valueOf(substrstan2);
+                editor.putString("terminalStan",finalstanNumber);
+                editor.commit();
                 ////final qr string customer_id,fare,fareType,routeId,transId,transStatusId////////
                 String[] qrData=result.getContents().split(",");
                 customer_id=qrData[0];
@@ -239,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.printString("From : " + from);
                 printer.printString("To   : " + to);
                 printer.printString("Bus No. : " + busNumber);
-                printer.printString("STAN : " + stanNumber);
+                printer.printString("STAN : " + finalstanNumber);
                 printer.setLeftMargin(0);
                 printer.printString(line);
                 printer.setAlignment(0);
