@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.printString(" ");
                 printer.setAlignment(1);
                 printer.setBold(true);
-                printer.printString("powered by Epayplus");
+                printer.printString("POWER BY ELECTRONIC EPAYPLUS");
                 printer.printString(" ");
                 printer.printString(" ");
 

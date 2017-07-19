@@ -220,13 +220,17 @@ public class Transactions extends AppCompatActivity  {
 
                 SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo",MODE_PRIVATE);
                 float commission = 0;
+                float stackholderCommission=0;
+                float managerCommission=0;
+                float operatorCommission=0;
 
                 map.put("customer_id",transId.get(1));
                 map.put("fare_type_id",transId.get(2));
                 map.put("route_id",transId.get(3));
                 map.put("bus_type_id",sharedPreferences.getString("abc","1"));
-                map.put("terminal_id",sharedPreferences.getString("buss",""));
+                map.put("terminal_id",sharedPreferences.getString("terminalId",""));
                 map.put("operator_id",sharedPreferences.getString("operator",""));
+                map.put("bus_id",sharedPreferences.getString("busId",""));
                 map.put("amount_paid",transId.get(7));
                 map.put("fee_paid",transId.get(8));
                 map.put("currency","171");
@@ -234,14 +238,27 @@ public class Transactions extends AppCompatActivity  {
                 map.put("paid_date",transId.get(11));
                 map.put("trans_date",transId.get(12));
                 map.put("cancel_date",transId.get(13));
+                String personTraveling=dbManager.fetch_no_of_persons(transId.get(10));
                 if(sharedPreferences.getString("commissionType","").equals("1")){
-                    String personTraveling=dbManager.fetch_no_of_persons(transId.get(10));
-                    commission=Integer.parseInt(sharedPreferences.getString("commission",""))*Integer.parseInt(personTraveling);
+
+
+                    commission=Integer.parseInt(sharedPreferences.getString("commission",""));//*Integer.parseInt(personTraveling);
+                    stackholderCommission=Integer.parseInt(sharedPreferences.getString("stakeholder_Commission",""))*Integer.parseInt(personTraveling);
+                    managerCommission=Integer.parseInt(sharedPreferences.getString("manager_Commission",""))*Integer.parseInt(personTraveling);
+                    operatorCommission=Integer.parseInt(sharedPreferences.getString("operater_Commission",""))*Integer.parseInt(personTraveling);
                 }else if(sharedPreferences.getString("commissionType","").equals("2")){
-                    commission=Integer.parseInt(transId.get(7))*(Integer.parseInt(sharedPreferences.getString("commission",""))/100);
+                    commission=Integer.parseInt(sharedPreferences.getString("commission",""));//Integer.parseInt(transId.get(7))*(Integer.parseInt(sharedPreferences.getString("commission",""))/100);
+                    float percstackCommission=(Integer.parseInt(sharedPreferences.getString("stakeholder_Commission",""))*commission)/100;
+                    float percmanagerCommission=(Integer.parseInt(sharedPreferences.getString("manager_Commission",""))*commission)/100;
+                    float percoperCommission=(Integer.parseInt(sharedPreferences.getString("operater_Commission",""))*commission)/100;
+                    stackholderCommission=Integer.parseInt(personTraveling)*percstackCommission;
+                    managerCommission=Integer.parseInt(personTraveling)*percmanagerCommission;
+                    operatorCommission=Integer.parseInt(personTraveling)*percoperCommission;
                 }
                 map.put("commission_type",sharedPreferences.getString("commissionType",""));
-                map.put("commission", String.valueOf(commission));
+                map.put("commission", String.valueOf(stackholderCommission));
+                map.put("mngr_comm", String.valueOf(managerCommission));
+                map.put("opr_comm", String.valueOf(operatorCommission));
                 map.put("terminal_stan", stanNumber);
                 return map;
             }

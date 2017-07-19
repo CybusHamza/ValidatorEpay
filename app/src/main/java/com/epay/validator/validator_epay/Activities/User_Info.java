@@ -52,9 +52,13 @@ public class User_Info extends AppCompatActivity {
     private List<String> opId_list;
     private List<String> buss_list;
     private List<String> bussId_list;
+    private List<String> bussIds_original_list;
     private List<String> pincodelist;
     private List<String> busRegistrationList;
     private List<String> commissionList;
+    private List<String> stakeholder_CommissionList;
+    private List<String> manager_CommissionList;
+    private List<String> operater_CommissionList;
     private List<String> commissionTypeList;
     private List<String> terminalList;
     private List<String> terminalIdList;
@@ -106,11 +110,16 @@ public class User_Info extends AppCompatActivity {
                                     editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
                                     editor.putString("commission",commissionList.get((int) stakeholder.getSelectedItemId()));
                                     editor.putString("commissionType",commissionTypeList.get((int) stakeholder.getSelectedItemId()));
+                                    editor.putString("stakeholder_Commission",stakeholder_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                                    editor.putString("manager_Commission",manager_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                                    editor.putString("operater_Commission",operater_CommissionList.get((int) stakeholder.getSelectedItemId()));
                                     editor.putString("operator", opId_list.get((int) opperator.getSelectedItemId()));
                                     editor.putString("buss", bussId_list.get((int) terminal.getSelectedItemId()));
                                     editor.putString("Pincode", pincodelist.get(id));
                                     editor.putString("busNumber",busRegistrationList.get(id));
+                                    editor.putString("busId",bussIds_original_list.get(id));
                                     editor.putString("terminalName",allTerminals.getSelectedItem().toString());
+                                    editor.putString("terminalId",terminalIdList.get((int) allTerminals.getSelectedItemId()));
                                     editor.putString("terminalStan",terminalStanList.get((int) allTerminals.getSelectedItemId()));
                                     editor.putString("managerCode",managerCodeList.get((int) allTerminals.getSelectedItemId()));
                                     editor.putString("is_first", "true");
@@ -164,6 +173,9 @@ public class User_Info extends AppCompatActivity {
                             stake_list = new ArrayList<>();
                             stakeID_list = new ArrayList<>();
                             commissionList = new ArrayList<>();
+                            stakeholder_CommissionList = new ArrayList<>();
+                            manager_CommissionList = new ArrayList<>();
+                            operater_CommissionList = new ArrayList<>();
                             commissionTypeList = new ArrayList<>();
 
                             jsonArray = new JSONArray(response);
@@ -171,8 +183,11 @@ public class User_Info extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
                                 stake_list.add(jsonObject.getString("first_name") + jsonObject.getString("last_name"));
                                 stakeID_list.add(jsonObject.getString("stakeholder_id"));
-                                commissionList.add(jsonObject.getString("commission"));
-                                commissionTypeList.add(jsonObject.getString("commission_type"));
+                                commissionList.add(jsonObject.getString("total_Commission"));
+                                stakeholder_CommissionList.add(jsonObject.getString("stakeholder_Commission"));
+                                manager_CommissionList.add(jsonObject.getString("manager_Commission"));
+                                operater_CommissionList.add(jsonObject.getString("operater_Commission"));
+                                commissionTypeList.add(jsonObject.getString("Commission_type"));
 
                             }
 
@@ -319,6 +334,7 @@ public class User_Info extends AppCompatActivity {
 
                         buss_list = new ArrayList<>();
                         bussId_list = new ArrayList<>();
+                        bussIds_original_list = new ArrayList<>();
                         pincodelist = new ArrayList<>();
                         busRegistrationList = new ArrayList<>();
 
@@ -326,6 +342,7 @@ public class User_Info extends AppCompatActivity {
                         if (resp.equals("false")) {
                             buss_list.add("No Records Founds");
                             bussId_list.add("0");
+                            bussIds_original_list.add("0");
                             pincodelist.add("0");
 
                         } else {
@@ -338,6 +355,7 @@ public class User_Info extends AppCompatActivity {
                                     bussId_list.add(jsonObject.getString("driver_id"));
                                     pincodelist.add(jsonObject.getString("driver_pin_code"));
                                     busRegistrationList.add(jsonObject.getString("Bus_Number"));
+                                    bussIds_original_list.add(jsonObject.getString("Bus_ID"));
 
                                 }
 
