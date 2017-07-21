@@ -102,7 +102,7 @@ public class DBManager {
         long result = database.insert(DatabaseHelper.HISTORY_TRAVEL, null, contentValue);
     }
 
-    public void insert_into_transactions(String t_customer_id,String t_fare_type_id,String t_route_id,String t_bus_type_id,String t_amount_paid,String t_currency,String t_trans_status_id,String t_trans_id,String t_paid_date,String t_trans_date,String t_cancel_date) {
+    public void insert_into_transactions(String t_customer_id,String t_fare_type_id,String t_route_id,String t_bus_type_id,String t_amount_paid,String t_currency,String t_trans_status_id,String t_trans_id,String t_paid_date,String t_trans_date,String t_cancel_date,String t_stan) {
         ContentValues contentValue = new ContentValues();
 
         // contentValue.put(DatabaseHelper.H_ID, h_id);
@@ -128,6 +128,7 @@ public class DBManager {
         contentValue.put(DatabaseHelper.T_PAID_DATE, t_paid_date);
         contentValue.put(DatabaseHelper.T_TRANS_DATE, t_trans_date);
         contentValue.put(DatabaseHelper.T_CANCEL_DATE, "");
+        contentValue.put(DatabaseHelper.T_STAN, t_stan);
         long result = database.insert(DatabaseHelper.TRANSACTIONS_TABLE, null, contentValue);
     }
     public String[] fetch_transaction_table() {
@@ -222,6 +223,7 @@ public class DBManager {
                 stringArrayList.add(cursor.getString(11));
                 stringArrayList.add(cursor.getString(12));
                 stringArrayList.add(cursor.getString(13));
+                stringArrayList.add(cursor.getString(14));
 
                 data.put(i,stringArrayList);
                 i++;

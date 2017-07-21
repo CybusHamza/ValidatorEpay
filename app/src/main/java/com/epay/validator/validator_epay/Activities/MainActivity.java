@@ -17,8 +17,10 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.pt.printer.Printer;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -75,11 +77,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     android.support.v7.widget.Toolbar toolbar;
      String Qrsting;
     String busNumber,stanNumber;
+    View logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar.setTitle("Dashboard");
+        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+        logo = getLayoutInflater().inflate(R.layout.logout_xml, null);
+        toolbar.inflateMenu(R.menu.menu_main);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+
+                switch (id) {
+                    case R.id.action_logout:
+                       SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
+                       SharedPreferences.Editor editor=sharedPreferences.edit();
+                        editor.putString("login","false");
+                        editor.commit();
+                        Toast.makeText(MainActivity.this,"You have been successfully logged out", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(MainActivity.this, SetupScreen.class);
+                        finish();
+                        startActivity(intent);
+
+                        return true;
+                }
+
+                return true;
+            }
+        });
         SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
         busNumber=sharedPreferences.getString("busNumber","");
 
@@ -159,10 +189,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
                 Calendar cal = Calendar.getInstance();
-                SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ");
+                SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String strDate = mdformat.format(cal.getTime());
 
-                dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,strDate,strDate,strDate);
+                dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,strDate,strDate,strDate,finalstanNumber);
                 dbManager.insert_into_history_travel(routeId,customer_id,transId,no_of_persons,strDate,"0000-00-00");
 
                 Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
@@ -248,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.printString("Total : NGN " + fare);
                 printer.printString("From : " + from);
                 printer.printString("To   : " + to);
-                printer.printString("Bus No. : " + busNumber);
+                printer.printString("Vehicle Reg# : " + busNumber);
                 printer.printString("STAN : " + finalstanNumber);
                 printer.setLeftMargin(0);
                 printer.printString(line);
@@ -256,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.printString(" ");
                 printer.setAlignment(1);
                 printer.setBold(true);
-                printer.printString("POWER BY ELECTRONIC EPAYPLUS");
+                printer.printString("POWER BY ELECTRONIC PAYPLUS");
                 printer.printString(" ");
                 printer.printString(" ");
 
@@ -276,6 +306,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("name",name);
                 intent.putExtra("number",number);
                 startActivity(intent);*/
+                qrScan.setOrientationLocked(true);
+                qrScan.initiateScan();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

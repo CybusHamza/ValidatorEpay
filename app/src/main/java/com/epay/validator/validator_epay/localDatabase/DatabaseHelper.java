@@ -78,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String T_PAID_DATE = "paid_date";
     public static final String T_TRANS_DATE = "trans_date";
     public static final String T_CANCEL_DATE = "cancel_date";
+    public static final String T_STAN = "trans_stan";
 
 
 
@@ -109,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_TRANSACTIONS = "create table " + TRANSACTIONS_TABLE + "(" + T_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + T_CUSTOMER_ID + " TEXT, " + T_FARE_TYPE_ID + " TEXT," + T_ROUTE_ID + " TEXT," + T_BUS_TYPE_ID + " TEXT,"+  T_OPERATOR_ID + " TEXT,"+ T_TERMINAL_ID + " TEXT,"+T_AMOUNT_PAID + " TEXT,"+ T_CURRENCY + " TEXT,"
-            + T_TRANS_STATUS_ID + " TEXT,"+ T_TRANS_ID + " TEXT,"+ T_PAID_DATE + " TEXT,"+ T_TRANS_DATE + " TEXT,"+ T_CANCEL_DATE + " TEXT);";
+            + T_TRANS_STATUS_ID + " TEXT,"+ T_TRANS_ID + " TEXT,"+ T_PAID_DATE + " TEXT,"+ T_TRANS_DATE + " TEXT,"+ T_CANCEL_DATE + " TEXT,"+ T_STAN + " TEXT);";
 
 
     public DatabaseHelper(Context context) {

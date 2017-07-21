@@ -10,6 +10,7 @@ public class End_Points {
     public static String GETSTAKE = BASE_URL + "getstakeholder";
     public static String GETOPERATORS = BASE_URL + "getoperators";
     public static String GETBUSES= BASE_URL + "getTerminals";
+    public static String GET_SETUP= BASE_URL + "getSetup";
     public static String GET_TERMINALS= BASE_URL + "getAllTerminals";
     public static String GETROUTES = BASE_URL + "getDefienedRoutes";
     public static String GETROUTES_RATES = BASE_URL + "getRates";

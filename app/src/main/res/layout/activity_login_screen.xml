@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.epay.validator.validator_epay.Activities.LoginScreen"
+    android:background="@drawable/a">
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar">
+    </include>
+    <LinearLayout
+        android:layout_below="@id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp">
+    <TextView
+        android:id="@+id/tvdriverName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Driver Name"
+        android:textColor="#fff"
+        android:textSize="20dp"/>
+        <EditText
+            android:id="@+id/etdriverName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Driver Name"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/tvdriverPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pin Code"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:layout_marginTop="30dp"/>
+        <EditText
+            android:id="@+id/etdriverPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Pin Code"
+            android:textColor="#fff"
+            android:inputType="textPassword"
+            android:textColorHint="#fff"
+            android:layout_marginTop="20dp"/>
+        <Button
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:id="@+id/btnLogin"
+            android:layout_alignParentBottom="true"
+            android:text="Login"
+            android:textColor="#fff"
+            android:background="@drawable/bg_btn_route_detailed"
+            android:layout_marginTop="180dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
