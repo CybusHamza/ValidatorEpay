@@ -1,6 +1,7 @@
 package com.epay.validator.validator_epay.Activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -85,26 +88,33 @@ public class SetupScreenExtended extends AppCompatActivity {
         SaveSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = (int) stakeholder.getSelectedItemId();
-                    if (!terminal.getSelectedItem().toString().equals("No Records Founds")) {
-                                    editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
-                                    editor.putString("commission",commissionList.get((int) stakeholder.getSelectedItemId()));
-                                    editor.putString("commissionType",commissionTypeList.get((int) stakeholder.getSelectedItemId()));
-                                    editor.putString("stakeholder_Commission",stakeholder_CommissionList.get((int) stakeholder.getSelectedItemId()));
-                                    editor.putString("manager_Commission",manager_CommissionList.get((int) stakeholder.getSelectedItemId()));
-                                    editor.putString("operater_Commission",operater_CommissionList.get((int) stakeholder.getSelectedItemId()));
-                                    editor.putString("operator", sharedPreferences.getString("operatorId",""));
-                                    editor.putString("driverName", buss_list.get((int) vehicleRegSpinner.getSelectedItemId()));
-                                    editor.putString("buss", bussId_list.get((int) vehicleRegSpinner.getSelectedItemId()));
-                                    editor.putString("Pincode", pincodelist.get((int) vehicleRegSpinner.getSelectedItemId()));
-                                    editor.putString("busNumber",busRegistrationList.get((int) vehicleRegSpinner.getSelectedItemId()));
-                                    editor.putString("busId",bussIds_original_list.get((int) vehicleRegSpinner.getSelectedItemId()));
-                                    editor.putString("is_first", "true");
-                                    editor.apply();
+                String stakeholderName= stakeholder.getSelectedItem().toString();
+                String vehicleRegName= stakeholder.getSelectedItem().toString();
+                    if (stakeholderName!=null) {
+                        int id = (int) stakeholder.getSelectedItemId();
+                        if (vehicleRegName!=null ){
+                            editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
+                        editor.putString("commission", commissionList.get((int) stakeholder.getSelectedItemId()));
+                        editor.putString("commissionType", commissionTypeList.get((int) stakeholder.getSelectedItemId()));
+                        editor.putString("stakeholder_Commission", stakeholder_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                        editor.putString("manager_Commission", manager_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                        editor.putString("operater_Commission", operater_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                        editor.putString("operator", sharedPreferences.getString("operatorId", ""));
+                        editor.putString("driverName", buss_list.get((int) vehicleRegSpinner.getSelectedItemId()));
+                        editor.putString("buss", bussId_list.get((int) vehicleRegSpinner.getSelectedItemId()));
+                        editor.putString("Pincode", pincodelist.get((int) vehicleRegSpinner.getSelectedItemId()));
+                        editor.putString("busNumber", busRegistrationList.get((int) vehicleRegSpinner.getSelectedItemId()));
+                        editor.putString("busId", bussIds_original_list.get((int) vehicleRegSpinner.getSelectedItemId()));
+                        editor.putString("is_first", "true");
+                        editor.apply();
 
-                                    Intent intent = new Intent(SetupScreenExtended.this, SetupScreen.class);
-                                    finish();
-                                    startActivity(intent);
+                        Intent intent = new Intent(SetupScreenExtended.this, SetupScreen.class);
+                        finish();
+                        startActivity(intent);
+                    }else {
+                            Toast.makeText(SetupScreenExtended.this, "No Vehicle Found", Toast.LENGTH_SHORT).show();
+
+                        }
 
                     } else {
                         Toast.makeText(SetupScreenExtended.this, "Please Select Stakeholder", Toast.LENGTH_SHORT).show();
@@ -120,9 +130,9 @@ public class SetupScreenExtended extends AppCompatActivity {
     }
     public void dialog_Setup(){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(SetupScreenExtended.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(SetupScreenExtended.this);
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.dialog_terminal_manager_pin_code, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_terminal_manager_pin_code, null);
         builder.setView(dialogView);
         builder.setCancelable(false);
 
@@ -131,6 +141,7 @@ public class SetupScreenExtended extends AppCompatActivity {
         final EditText mngrCode = (EditText) dialogView.findViewById(R.id.managercode);
         Button send = (Button) dialogView.findViewById(R.id.send);
         ImageView cancel = (ImageView) dialogView.findViewById(R.id.btn_cancel);
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,19 +154,26 @@ public class SetupScreenExtended extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int position=terminal.getSelectedItemPosition();
+               // String terminalName= terminal.getSelectedItem().toString();
+                if(position!=-1 && !terminalList.isEmpty()) {
 
-                int id = (int) terminal.getSelectedItemId();
-                if((managerCodeList.get(id).equals(mngrCode.getText().toString()))){
-                    myalertdialog.dismiss();
-                    editor.putString("terminalName",terminal.getSelectedItem().toString());
-                    editor.putString("terminalId",terminalIdList.get(id));
-                    editor.putString("terminalStan",terminalStanList.get(id));
-                    editor.putString("managerCode",managerCodeList.get(id));
-                    editor.putString("operatorId",opId_list.get(id));
-                    editor.commit();
-                    getOperators(opId_list.get(id));
-                }else{
-                    Toast.makeText(SetupScreenExtended.this, "Please Enter Valid Terminal Manager Pin Code", Toast.LENGTH_SHORT).show();
+                    int id = (int) terminal.getSelectedItemId();
+                    if ((managerCodeList.get(id).equals(mngrCode.getText().toString()))) {
+                        myalertdialog.dismiss();
+                        editor.putString("terminalName", terminal.getSelectedItem().toString());
+                        editor.putString("terminalId", terminalIdList.get(id));
+                        editor.putString("terminalStan", terminalStanList.get(id));
+                        editor.putString("managerCode", managerCodeList.get(id));
+                        editor.putString("operatorId", opId_list.get(id));
+                        editor.commit();
+                        getOperators(opId_list.get(id));
+                    } else {
+                        Toast.makeText(SetupScreenExtended.this, "Please Enter Valid Terminal Manager Pin Code", Toast.LENGTH_SHORT).show();
+
+                    }
+                }else {
+                    Toast.makeText(SetupScreenExtended.this, "No Terminal found", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -479,11 +497,13 @@ public class SetupScreenExtended extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 ringProgressDialog.dismiss();
+
                 if (error instanceof NoConnectionError) {
 
                     Toast.makeText(SetupScreenExtended.this, "No connection Error", Toast.LENGTH_SHORT).show();
 
                 } else if (error instanceof TimeoutError) {
+
 
                     Toast.makeText(SetupScreenExtended.this, " connection Time out Error", Toast.LENGTH_SHORT).show();
 
