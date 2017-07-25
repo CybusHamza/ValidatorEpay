@@ -88,11 +88,13 @@ public class SetupScreenExtended extends AppCompatActivity {
         SaveSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String stakeholderName= stakeholder.getSelectedItem().toString();
-                String vehicleRegName= stakeholder.getSelectedItem().toString();
-                    if (stakeholderName!=null) {
+                //String stakeholderName= stakeholder.getSelectedItem().toString();
+                int position=stakeholder.getSelectedItemPosition();
+                int position1=vehicleRegSpinner.getSelectedItemPosition();
+                //String vehicleRegName= vehicleRegSpinner.getSelectedItem().toString();
+                    if (position!=-1) {
                         int id = (int) stakeholder.getSelectedItemId();
-                        if (vehicleRegName!=null ){
+                        if (position1!=-1){
                             editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
                         editor.putString("commission", commissionList.get((int) stakeholder.getSelectedItemId()));
                         editor.putString("commissionType", commissionTypeList.get((int) stakeholder.getSelectedItemId()));

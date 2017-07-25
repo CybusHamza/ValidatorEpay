@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.printString("To   : " + to);
                 printer.printString("Vehicle Reg# : " + busNumber);
                 printer.printString("STAN : " + finalstanNumber);
+                printer.printString("Terminal Id : " + sharedPreferences.getString("terminalId",""));
                 printer.setLeftMargin(0);
                 printer.printString(line);
                 printer.setAlignment(0);
