@@ -8,31 +8,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Camera;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.pt.printer.Printer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.epay.validator.validator_epay.Qr_Genrator.Contents;
-import com.epay.validator.validator_epay.Qr_Genrator.QRCodeEncoder;
 import com.epay.validator.validator_epay.R;
 import com.epay.validator.validator_epay.localDatabase.DBManager;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -160,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
                     // textViewName.setText(result.getContents());
-                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                  // Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 }
                 SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -175,6 +165,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ////final qr string customer_id,fare,fareType,routeId,transId,transStatusId////////
                 String[] qrData=result.getContents().split(",");
                 customer_id=qrData[0];
+
+                if(qrData[11].equals("Not_Scanable"))
+                {
+                    Toast.makeText(this, "This Qr is not valid", Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+
                 fare=qrData[1];
                 fareType=qrData[2];
                 routeId=qrData[3];
@@ -223,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-                new CountDownTimer(20000, 1000) {
+                new CountDownTimer(2000, 1000) {
 
                     public void onTick(long millisUntilFinished) {
                     }
@@ -309,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);*/
                 qrScan.setOrientationLocked(true);
                 qrScan.initiateScan();
+            }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

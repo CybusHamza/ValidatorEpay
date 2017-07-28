@@ -1,16 +1,13 @@
 package com.epay.validator.validator_epay.Activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -211,7 +208,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                             jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
-                                stake_list.add(jsonObject.getString("first_name") + jsonObject.getString("last_name"));
+                                stake_list.add(jsonObject.getString("first_name") );
                                 stakeID_list.add(jsonObject.getString("stakeholder_id"));
                                 commissionList.add(jsonObject.getString("total_Commission"));
                                 stakeholder_CommissionList.add(jsonObject.getString("stakeholder_Commission"));
