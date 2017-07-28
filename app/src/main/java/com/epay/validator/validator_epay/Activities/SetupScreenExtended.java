@@ -120,8 +120,6 @@ public class SetupScreenExtended extends AppCompatActivity {
                         Toast.makeText(SetupScreenExtended.this, "Please Select Stakeholder", Toast.LENGTH_SHORT).show();
 
                     }
-
-
             }
         });
 
