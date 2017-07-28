@@ -23,14 +23,14 @@
         android:id="@+id/tvdriverName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Driver Name"
+        android:text="Terminal Name"
         android:textColor="#fff"
         android:textSize="20dp"/>
         <EditText
             android:id="@+id/etdriverName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Driver Name"
+            android:hint="Enter Terminal Name"
             android:textColor="#fff"
             android:textColorHint="#fff"
             android:layout_marginTop="20dp"/>
@@ -46,7 +46,7 @@
             android:id="@+id/etdriverPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Pin Code"
+            android:hint="Enter Manager Pin Code"
             android:textColor="#fff"
             android:inputType="textPassword"
             android:textColorHint="#fff"

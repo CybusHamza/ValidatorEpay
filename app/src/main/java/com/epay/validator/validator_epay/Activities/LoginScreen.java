@@ -17,7 +17,7 @@ public class LoginScreen extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    String driverName,operatorId,PinCode;
+    String driverName,operatorId,PinCode,terminalName,terminalMangerCode;
     EditText etDriverName,etPass;
     Button btnLogin;
 
@@ -39,6 +39,8 @@ public class LoginScreen extends AppCompatActivity {
         PinCode=sharedPreferences.getString("Pincode","");
         operatorId=sharedPreferences.getString("operator","");
         isLogin=sharedPreferences.getString("login","");
+        terminalName=sharedPreferences.getString("terminalName","");
+        terminalMangerCode=sharedPreferences.getString("managerCode","");
         etDriverName= (EditText) findViewById(R.id.etdriverName);
         etPass= (EditText) findViewById(R.id.etdriverPass);
         btnLogin= (Button) findViewById(R.id.btnLogin);
@@ -47,7 +49,7 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(driverName.equals(etDriverName.getText().toString())&& PinCode.equals(etPass.getText().toString())){
+                if(terminalName.equals(etDriverName.getText().toString())&& terminalMangerCode.equals(etPass.getText().toString())){
                     editor.putString("login","true");
                     editor.commit();
                     Intent intent = new Intent(LoginScreen.this, MainActivity.class);

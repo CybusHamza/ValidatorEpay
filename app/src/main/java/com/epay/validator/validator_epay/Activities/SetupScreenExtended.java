@@ -93,21 +93,22 @@ public class SetupScreenExtended extends AppCompatActivity {
                         int id = (int) stakeholder.getSelectedItemId();
                         if (position1!=-1){
                             editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
-                        editor.putString("commission", commissionList.get((int) stakeholder.getSelectedItemId()));
-                        editor.putString("commissionType", commissionTypeList.get((int) stakeholder.getSelectedItemId()));
-                        editor.putString("stakeholder_Commission", stakeholder_CommissionList.get((int) stakeholder.getSelectedItemId()));
-                        editor.putString("manager_Commission", manager_CommissionList.get((int) stakeholder.getSelectedItemId()));
-                        editor.putString("operater_Commission", operater_CommissionList.get((int) stakeholder.getSelectedItemId()));
-                        editor.putString("operator", sharedPreferences.getString("operatorId", ""));
-                        editor.putString("driverName", buss_list.get((int) vehicleRegSpinner.getSelectedItemId()));
-                        editor.putString("buss", bussId_list.get((int) vehicleRegSpinner.getSelectedItemId()));
-                        editor.putString("Pincode", pincodelist.get((int) vehicleRegSpinner.getSelectedItemId()));
-                        editor.putString("busNumber", busRegistrationList.get((int) vehicleRegSpinner.getSelectedItemId()));
-                        editor.putString("busId", bussIds_original_list.get((int) vehicleRegSpinner.getSelectedItemId()));
-                        editor.putString("is_first", "true");
-                        editor.apply();
+                            editor.putString("commission", commissionList.get((int) stakeholder.getSelectedItemId()));
+                            editor.putString("commissionType", commissionTypeList.get((int) stakeholder.getSelectedItemId()));
+                            editor.putString("stakeholder_Commission", stakeholder_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                            editor.putString("manager_Commission", manager_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                            editor.putString("operater_Commission", operater_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                            editor.putString("operator", sharedPreferences.getString("operatorId", ""));
+                            editor.putString("driverName", buss_list.get((int) vehicleRegSpinner.getSelectedItemId()));
+                            editor.putString("buss", bussId_list.get((int) vehicleRegSpinner.getSelectedItemId()));
+                            editor.putString("Pincode", pincodelist.get((int) vehicleRegSpinner.getSelectedItemId()));
+                            editor.putString("busNumber", busRegistrationList.get((int) vehicleRegSpinner.getSelectedItemId()));
+                            editor.putString("busId", bussIds_original_list.get((int) vehicleRegSpinner.getSelectedItemId()));
+                            editor.putString("is_first", "true");
+                            editor.putString("login","true");
+                            editor.apply();
 
-                        Intent intent = new Intent(SetupScreenExtended.this, SetupScreen.class);
+                        Intent intent = new Intent(SetupScreenExtended.this, MainActivity.class);
                         finish();
                         startActivity(intent);
                     }else {
