@@ -60,6 +60,7 @@ public class SetupScreenExtended extends AppCompatActivity {
     private List<String> pincodelist;
     private List<String> busRegistrationList;
     private List<String> commissionList;
+    private List<String> commissionIdList;
     private List<String> stakeholder_CommissionList;
     private List<String> manager_CommissionList;
     private List<String> operater_CommissionList;
@@ -68,6 +69,15 @@ public class SetupScreenExtended extends AppCompatActivity {
     private List<String> terminalIdList;
     private List<String> terminalStanList;
     private List<String> managerCodeList;
+    private List<String> participantAcquirerComm;
+    private List<String> participantPtspComm;
+    private List<String> participantOprComm;
+    private List<String> participantSwitchComm;
+    private List<String> participantProcessorComm;
+    private List<String> participantIssuerComm;
+    private List<String> participantMngrComm;
+
+
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
@@ -95,9 +105,16 @@ public class SetupScreenExtended extends AppCompatActivity {
                             editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
                             editor.putString("commission", commissionList.get((int) stakeholder.getSelectedItemId()));
                             editor.putString("commissionType", commissionTypeList.get((int) stakeholder.getSelectedItemId()));
-                            editor.putString("stakeholder_Commission", stakeholder_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                           /* editor.putString("stakeholder_Commission", stakeholder_CommissionList.get((int) stakeholder.getSelectedItemId()));
                             editor.putString("manager_Commission", manager_CommissionList.get((int) stakeholder.getSelectedItemId()));
-                            editor.putString("operater_Commission", operater_CommissionList.get((int) stakeholder.getSelectedItemId()));
+                            editor.putString("operater_Commission", operater_CommissionList.get((int) stakeholder.getSelectedItemId()));*/
+                            editor.putString("acquirer_com", participantAcquirerComm.get(0));
+                            editor.putString("ptsp_com", participantPtspComm.get(0));
+                            editor.putString("opr_comm", participantOprComm.get(0));
+                            editor.putString("switch_com", participantSwitchComm.get(0));
+                            editor.putString("processor_com", participantProcessorComm.get(0));
+                            editor.putString("issuer_com", participantIssuerComm.get(0));
+                            editor.putString("mngr_comm", participantMngrComm.get(0));
                             editor.putString("operator", sharedPreferences.getString("operatorId", ""));
                             editor.putString("driverName", buss_list.get((int) vehicleRegSpinner.getSelectedItemId()));
                             editor.putString("buss", bussId_list.get((int) vehicleRegSpinner.getSelectedItemId()));
@@ -199,9 +216,10 @@ public class SetupScreenExtended extends AppCompatActivity {
                             stake_list = new ArrayList<>();
                             stakeID_list = new ArrayList<>();
                             commissionList = new ArrayList<>();
-                            stakeholder_CommissionList = new ArrayList<>();
+                            commissionIdList = new ArrayList<>();
+                            /*stakeholder_CommissionList = new ArrayList<>();
                             manager_CommissionList = new ArrayList<>();
-                            operater_CommissionList = new ArrayList<>();
+                            operater_CommissionList = new ArrayList<>();*/
                             commissionTypeList = new ArrayList<>();
 
                             jsonArray = new JSONArray(response);
@@ -210,9 +228,10 @@ public class SetupScreenExtended extends AppCompatActivity {
                                 stake_list.add(jsonObject.getString("first_name") );
                                 stakeID_list.add(jsonObject.getString("stakeholder_id"));
                                 commissionList.add(jsonObject.getString("total_Commission"));
-                                stakeholder_CommissionList.add(jsonObject.getString("stakeholder_Commission"));
+                                commissionIdList.add(jsonObject.getString("Commission_ID"));
+                               /* stakeholder_CommissionList.add(jsonObject.getString("stakeholder_Commission"));
                                 manager_CommissionList.add(jsonObject.getString("manager_Commission"));
-                                operater_CommissionList.add(jsonObject.getString("operater_Commission"));
+                                operater_CommissionList.add(jsonObject.getString("operater_Commission"));*/
                                 commissionTypeList.add(jsonObject.getString("Commission_type"));
 
                             }
@@ -249,6 +268,98 @@ public class SetupScreenExtended extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("stake_holder_id", operatorId);
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue requestQueue = Volley.newRequestQueue(SetupScreenExtended.this);
+        requestQueue.add(request);
+
+    }
+
+    public void getParticipantCommission() {
+        int id = (int) stakeholder.getSelectedItemId();
+        final String commissionId=commissionIdList.get(id);
+        ringProgressDialog = ProgressDialog.show(SetupScreenExtended.this, "", "Please wait ...", true);
+        ringProgressDialog.setCancelable(false);
+        ringProgressDialog.show();
+
+        StringRequest request = new StringRequest(Request.Method.POST, End_Points.GETPARTICIPANTCOMMISSION,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        ringProgressDialog.dismiss();
+                        JSONArray jsonArray = null;
+                        try {
+                            participantAcquirerComm = new ArrayList<>();
+                            participantIssuerComm = new ArrayList<>();
+                            participantMngrComm = new ArrayList<>();
+                            participantOprComm = new ArrayList<>();
+                            participantProcessorComm = new ArrayList<>();
+                            participantPtspComm = new ArrayList<>();
+                            participantSwitchComm = new ArrayList<>();
+
+                            jsonArray = new JSONArray(response);
+                            if(jsonArray.length()<1){
+                                participantAcquirerComm.add(0,"0");
+                                participantPtspComm.add(0,"0");
+                                participantOprComm.add(0,"0");
+                                participantSwitchComm.add(0,"0");
+                                participantProcessorComm.add(0,"0");
+                                participantIssuerComm.add(0,"0");
+                                participantMngrComm.add(0,"0");
+                            }
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = new JSONObject(jsonArray.getString(i));
+                                if(jsonObject.getString("part_type").equals("acquirer_com")){
+                                    participantAcquirerComm.add(jsonObject.getString("part_comm"));
+                                }else if(jsonObject.getString("part_type").equals("ptsp_com")){
+                                    participantPtspComm.add(jsonObject.getString("part_comm"));
+                                }else if(jsonObject.getString("part_type").equals("opr_comm")){
+                                    participantOprComm.add(jsonObject.getString("part_comm"));
+                                }else if(jsonObject.getString("part_type").equals("switch_com")){
+                                    participantSwitchComm.add(jsonObject.getString("part_comm"));
+                                }else if(jsonObject.getString("part_type").equals("processor_com")){
+                                    participantProcessorComm.add(jsonObject.getString("part_comm"));
+                                }else if(jsonObject.getString("part_type").equals("issuer_com")){
+                                    participantIssuerComm.add(jsonObject.getString("part_comm"));
+                                }else if(jsonObject.getString("part_type").equals("mngr_comm")){
+                                    participantMngrComm.add(jsonObject.getString("part_comm"));
+                                }
+                            }
+
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                ringProgressDialog.dismiss();
+                if (error instanceof NoConnectionError) {
+
+                    Toast.makeText(SetupScreenExtended.this, "No connection Error", Toast.LENGTH_SHORT).show();
+
+                } else if (error instanceof TimeoutError) {
+
+                    Toast.makeText(SetupScreenExtended.this, " connection Time out Error", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("com_id", commissionId);
                 return params;
             }
         };
@@ -568,7 +679,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                                     bussIds_original_list.add(jsonObject.getString("Bus_ID"));
 
                                 }
-
+                                getParticipantCommission();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
