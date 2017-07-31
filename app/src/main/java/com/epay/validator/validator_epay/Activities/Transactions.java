@@ -106,7 +106,6 @@ public class Transactions extends AppCompatActivity  {
                 View dialogView = inflater.inflate(R.layout.dailog_pincode, null);
                 builder.setView(dialogView);
 
-                final EditText code = (EditText) dialogView.findViewById(R.id.code);
                 final EditText mngrCode = (EditText) dialogView.findViewById(R.id.managercode);
                 Button send = (Button) dialogView.findViewById(R.id.send);
 
@@ -115,7 +114,7 @@ public class Transactions extends AppCompatActivity  {
 
                     public void onClick(View view) {
 
-                        if (code.getText().toString().equals(pin)) {
+
                             if (mngrCode.getText().toString().equals(managerCode)) {
                             if (isNetworkAvailable()) {
 
@@ -136,11 +135,6 @@ public class Transactions extends AppCompatActivity  {
                         }else {
                                 Toast.makeText(Transactions.this, "Wrong Manger Pin Entered", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                       else
-                        {
-                            Toast.makeText(Transactions.this, "Wrong Pin Enter", Toast.LENGTH_SHORT).show();
-                        }
 
                     }
                 });
@@ -207,9 +201,12 @@ public class Transactions extends AppCompatActivity  {
             public void onErrorResponse(VolleyError error) {
                 String message = null;
                 ringProgressDialog.dismiss();
-                finish();
                 if (error instanceof NetworkError) {
                     Toast.makeText(Transactions.this, "Cannot connect to Internet...Please check your connection!", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Toast.makeText(Transactions.this, "Connection time out error ", Toast.LENGTH_SHORT).show();
                 }
             }
 

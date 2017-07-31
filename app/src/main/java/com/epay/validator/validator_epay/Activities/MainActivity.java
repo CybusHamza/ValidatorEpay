@@ -14,7 +14,6 @@ import android.os.CountDownTimer;
 import android.pt.printer.Printer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,8 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 //implementing onclicklistener
@@ -182,13 +181,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int total = Integer.valueOf(fare) /Integer.valueOf(no_of_persons);
 
                 // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
-                Calendar cal = Calendar.getInstance();
+                    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    dateFormatter.setLenient(false);
+                    Date today = new Date();
+                  String  date = dateFormatter.format(today);
 
-                String now = new Time().toString();
 
-
-                    dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,now,now,now,finalstanNumber);
-                dbManager.insert_into_history_travel(routeId,customer_id,transId,no_of_persons,now,"0000-00-00");
+                    dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,date,date,date,finalstanNumber);
+                dbManager.insert_into_history_travel(routeId,customer_id,transId,no_of_persons,date,"0000-00-00");
 
                 Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
                 final Beacon beacon = new Beacon.Builder()
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.printQR(Qrsting, 4);
                 printer.printString(" ");
                 printer.setAlignment(0);
-                printer.printString("TRXN Date : " + now);
+                printer.printString("TRXN Date : " + date);
                 printer.setLeftMargin(2);
                 printer.printString("Customer : " + name);
                 printer.printString("TRXN Id : " +transId);
