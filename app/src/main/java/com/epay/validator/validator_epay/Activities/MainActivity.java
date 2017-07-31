@@ -14,6 +14,7 @@ import android.os.CountDownTimer;
 import android.pt.printer.Printer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -166,12 +166,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String[] qrData=result.getContents().split(",");
                 customer_id=qrData[0];
 
-                if(qrData[11].equals("Not_Scanable"))
+                if(qrData.length == 12 )
                 {
-                    Toast.makeText(this, "This Qr is not valid", Toast.LENGTH_SHORT).show();
-                }
-                else{
-
 
                 fare=qrData[1];
                 fareType=qrData[2];
@@ -187,11 +183,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
                 Calendar cal = Calendar.getInstance();
-                SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                String strDate = mdformat.format(cal.getTime());
 
-                dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,strDate,strDate,strDate,finalstanNumber);
-                dbManager.insert_into_history_travel(routeId,customer_id,transId,no_of_persons,strDate,"0000-00-00");
+                String now = new Time().toString();
+
+
+                    dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,now,now,now,finalstanNumber);
+                dbManager.insert_into_history_travel(routeId,customer_id,transId,no_of_persons,now,"0000-00-00");
 
                 Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
                 final Beacon beacon = new Beacon.Builder()
@@ -267,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 printer.printQR(Qrsting, 4);
                 printer.printString(" ");
                 printer.setAlignment(0);
-                printer.printString("TRXN Date : " + strDate);
+                printer.printString("TRXN Date : " + now);
                 printer.setLeftMargin(2);
                 printer.printString("Customer : " + name);
                 printer.printString("TRXN Id : " +transId);
@@ -308,7 +305,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 qrScan.setOrientationLocked(true);
                 qrScan.initiateScan();
             }
+
+            else{
+
+                    Toast.makeText(this, "In-Valid Qr Code Scanned.", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
+
+
         } else {
             super.onActivityResult(requestCode, resultCode, data);
 
