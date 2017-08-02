@@ -122,10 +122,10 @@ public class SetupScreenExtended extends AppCompatActivity {
                             editor.putString("busNumber", busRegistrationList.get((int) vehicleRegSpinner.getSelectedItemId()));
                             editor.putString("busId", bussIds_original_list.get((int) vehicleRegSpinner.getSelectedItemId()));
                             editor.putString("is_first", "true");
-                            editor.putString("login","true");
+//                            editor.putString("login","true");
                             editor.apply();
 
-                        Intent intent = new Intent(SetupScreenExtended.this, MainActivity.class);
+                        Intent intent = new Intent(SetupScreenExtended.this, LoginScreen.class);
                         finish();
                         startActivity(intent);
                     }else {

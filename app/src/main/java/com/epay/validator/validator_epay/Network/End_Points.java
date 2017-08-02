@@ -4,7 +4,8 @@ package com.epay.validator.validator_epay.Network;
 public class End_Points {
 
     public static String BASE_URL = "http://epay.cybussolutions.com/Api_Service/";
-    public static String LOGIN = BASE_URL + "loginUser";
+    public static String LOGIN_TERMINAL = BASE_URL + "loginTerminal";
+    public static String LOGIN_STATUS = BASE_URL + "loginStatus";
     public static String SIGNUP = BASE_URL + "signupUser";
     public static String GETDATA = BASE_URL + "getRoutes";
     public static String GETSTAKE = BASE_URL + "getstakeholder";

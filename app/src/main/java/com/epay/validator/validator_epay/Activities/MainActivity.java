@@ -1,6 +1,7 @@
 package com.epay.validator.validator_epay.Activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
@@ -21,6 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.epay.validator.validator_epay.Network.End_Points;
 import com.epay.validator.validator_epay.R;
 import com.epay.validator.validator_epay.localDatabase.DBManager;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -36,9 +48,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 //implementing onclicklistener
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    ProgressDialog ringProgressDialog;
+    private static final int MY_SOCKET_TIMEOUT_MS = 10000;
 
     String customer_id;
     String fare;
@@ -84,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 switch (id) {
                     case R.id.action_logout:
-                       SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
+                            changeStatus();
+                       /*SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
                        SharedPreferences.Editor editor=sharedPreferences.edit();
                         editor.putString("login","false");
                         editor.commit();
@@ -92,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Intent intent = new Intent(MainActivity.this, SetupScreen.class);
                         finish();
                         startActivity(intent);
-
+*/
                         return true;
                 }
 
@@ -415,5 +433,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return true;
+    }
+    public  void changeStatus(){
+        final SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
+        ringProgressDialog = ProgressDialog.show(MainActivity.this, "", "Please wait ...", true);
+        ringProgressDialog.setCancelable(false);
+        ringProgressDialog.show();
+
+        final StringRequest request = new StringRequest(Request.Method.POST, End_Points.LOGIN_STATUS,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        ringProgressDialog.dismiss();
+                        SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
+                        SharedPreferences.Editor editor=sharedPreferences.edit();
+                        editor.putString("login","false");
+                        editor.commit();
+                        Toast.makeText(MainActivity.this,"You have been successfully logged out", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(MainActivity.this, SetupScreen.class);
+                        finish();
+                        startActivity(intent);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                ringProgressDialog.dismiss();
+                if (error instanceof NoConnectionError) {
+
+                    Toast.makeText(MainActivity.this, "No connection Error", Toast.LENGTH_SHORT).show();
+
+                } else if (error instanceof TimeoutError) {
+
+                    Toast.makeText(MainActivity.this, " connection Time out Error", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("live_sattus", "0");
+                params.put("terminal_id", sharedPreferences.getString("terminalId",""));
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(request);
     }
 }

@@ -243,7 +243,7 @@ public class Transactions extends AppCompatActivity  {
                 if(sharedPreferences.getString("commissionType","").equals("1")){
 
 
-                    commission=Integer.parseInt(sharedPreferences.getString("commission",""));//*Integer.parseInt(personTraveling);
+                    commission=Integer.parseInt(sharedPreferences.getString("commission",""))*Integer.parseInt(personTraveling);
                     acquirer_com=Integer.parseInt(sharedPreferences.getString("acquirer_com",""))*Integer.parseInt(personTraveling);
                     ptsp_com=Integer.parseInt(sharedPreferences.getString("ptsp_com",""))*Integer.parseInt(personTraveling);
                     opr_comm=Integer.parseInt(sharedPreferences.getString("opr_comm",""))*Integer.parseInt(personTraveling);
@@ -252,7 +252,7 @@ public class Transactions extends AppCompatActivity  {
                     issuer_com=Integer.parseInt(sharedPreferences.getString("issuer_com",""))*Integer.parseInt(personTraveling);
                     mngr_comm=Integer.parseInt(sharedPreferences.getString("mngr_comm",""))*Integer.parseInt(personTraveling);
                 }else if(sharedPreferences.getString("commissionType","").equals("2")){
-                    commission=Integer.parseInt(sharedPreferences.getString("commission",""));//Integer.parseInt(transId.get(7))*(Integer.parseInt(sharedPreferences.getString("commission",""))/100);
+                    commission=Integer.parseInt(sharedPreferences.getString("commission",""))*Integer.parseInt(personTraveling);//Integer.parseInt(transId.get(7))*(Integer.parseInt(sharedPreferences.getString("commission",""))/100);
                     float percacquirerCommission=(Integer.parseInt(sharedPreferences.getString("acquirer_com",""))*commission)/100;
                     float percptspCommission=(Integer.parseInt(sharedPreferences.getString("ptsp_com",""))*commission)/100;
                     float percoprCommission=(Integer.parseInt(sharedPreferences.getString("opr_comm",""))*commission)/100;
