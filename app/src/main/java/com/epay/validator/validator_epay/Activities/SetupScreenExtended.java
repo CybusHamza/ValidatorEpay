@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -83,10 +84,17 @@ public class SetupScreenExtended extends AppCompatActivity {
     SharedPreferences.Editor editor;
 
     Button SaveSettings;
+
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_screen_extended);
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar.setTitle("Setup Screen");
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
@@ -217,7 +225,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                         try {
                             stake_list = new ArrayList<>();
                             stakeID_list = new ArrayList<>();
-                            bank_id_List = new ArrayList<>();
+                           // bank_id_List = new ArrayList<>();
                             commissionList = new ArrayList<>();
                             commissionIdList = new ArrayList<>();
                             /*stakeholder_CommissionList = new ArrayList<>();
@@ -232,7 +240,6 @@ public class SetupScreenExtended extends AppCompatActivity {
                                 stakeID_list.add(jsonObject.getString("stakeholder_id"));
                                 commissionList.add(jsonObject.getString("total_Commission"));
                                 commissionIdList.add(jsonObject.getString("Commission_ID"));
-                                bank_id_List.add(jsonObject.getString("bank_id"));
                                /* stakeholder_CommissionList.add(jsonObject.getString("stakeholder_Commission"));
                                 manager_CommissionList.add(jsonObject.getString("manager_Commission"));
                                 operater_CommissionList.add(jsonObject.getString("operater_Commission"));*/
@@ -567,6 +574,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                         terminalIdList = new ArrayList<>();
                         terminalStanList = new ArrayList<>();
                         managerCodeList = new ArrayList<>();
+                        bank_id_List = new ArrayList<>();
                         opId_list = new ArrayList<>();
                         if (resp.equals("false")) {
                             terminalList.add("No Records Founds");
@@ -586,6 +594,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                                     terminalStanList.add(jsonObject.getString("terminal_stan"));
                                     managerCodeList.add(jsonObject.getString("manager_password"));
                                     opId_list.add(jsonObject.getString("operator_id"));
+                                    bank_id_List.add(jsonObject.getString("bank_id"));
 
                                 }
 
@@ -683,7 +692,9 @@ public class SetupScreenExtended extends AppCompatActivity {
                                     bussIds_original_list.add(jsonObject.getString("Bus_ID"));
 
                                 }
-                                getParticipantCommission();
+                                if(jsonArray.length()>0) {
+                                    getParticipantCommission();
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

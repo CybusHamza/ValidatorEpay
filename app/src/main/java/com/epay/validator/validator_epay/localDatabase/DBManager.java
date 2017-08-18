@@ -257,6 +257,9 @@ public class DBManager {
                 id=cursor.getString(0);
             } while (cursor.moveToNext());
         }
+        if(id==null){
+            return "0";
+        }else
         return id;
     }
     public String h_fetch_route_table_start(String id) {
