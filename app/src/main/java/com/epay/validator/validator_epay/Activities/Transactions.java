@@ -280,6 +280,8 @@ public class Transactions extends AppCompatActivity  {
                /* map.put("mngr_comm", String.valueOf(managerCommission));
                 map.put("opr_comm", String.valueOf(operatorCommission));*/
                 map.put("terminal_stan", transId.get(14));
+                map.put("action_by",sharedPreferences.getString("terminalId",""));
+                map.put("bank_id",sharedPreferences.getString("bankId",""));
                 return map;
             }
         };

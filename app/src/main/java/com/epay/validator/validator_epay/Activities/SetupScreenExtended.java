@@ -49,6 +49,7 @@ public class SetupScreenExtended extends AppCompatActivity {
 
     private List<String> stake_list;
     private List<String> stakeID_list;
+    private List<String> bank_id_List;
     String selectedstakeID_list;
     private List<String> op_list;
     private List<String> opId_list;
@@ -178,6 +179,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                         myalertdialog.dismiss();
                         editor.putString("terminalName", terminal.getSelectedItem().toString());
                         editor.putString("terminalId", terminalIdList.get(id));
+                        editor.putString("bankId", bank_id_List.get(id));
                         editor.putString("terminalStan", terminalStanList.get(id));
                         editor.putString("managerCode", managerCodeList.get(id));
                         editor.putString("operatorId", opId_list.get(id));
@@ -215,6 +217,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                         try {
                             stake_list = new ArrayList<>();
                             stakeID_list = new ArrayList<>();
+                            bank_id_List = new ArrayList<>();
                             commissionList = new ArrayList<>();
                             commissionIdList = new ArrayList<>();
                             /*stakeholder_CommissionList = new ArrayList<>();
@@ -229,6 +232,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                                 stakeID_list.add(jsonObject.getString("stakeholder_id"));
                                 commissionList.add(jsonObject.getString("total_Commission"));
                                 commissionIdList.add(jsonObject.getString("Commission_ID"));
+                                bank_id_List.add(jsonObject.getString("bank_id"));
                                /* stakeholder_CommissionList.add(jsonObject.getString("stakeholder_Commission"));
                                 manager_CommissionList.add(jsonObject.getString("manager_Commission"));
                                 operater_CommissionList.add(jsonObject.getString("operater_Commission"));*/

@@ -41,6 +41,7 @@ import com.google.zxing.integration.android.IntentResult;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,7 +54,7 @@ import java.util.Map;
 
 //implementing onclicklistener
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+    String r_id,route_code,route_name,route_start,route_destination,route_added_date,time,route_added_by,route_updated_date,route_updated_by;
     ProgressDialog ringProgressDialog;
     private static final int MY_SOCKET_TIMEOUT_MS = 10000;
 
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getLiveData();
 
         checkPrerequisites();
+        getRoutes();
         dbManager = new DBManager(MainActivity.this);
         dbManager.open();
 
@@ -167,145 +169,144 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
                     // textViewName.setText(result.getContents());
-                  // Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                    // Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 }
                 SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
-                stanNumber=sharedPreferences.getString("terminalStan","");
+                stanNumber = sharedPreferences.getString("terminalStan", "");
 
-                String substrstan1=stanNumber.substring(0,1);
-                int substrstan2=Integer.parseInt(stanNumber.substring(1,6));
+                String substrstan1 = stanNumber.substring(0, 1);
+                int substrstan2 = Integer.parseInt(stanNumber.substring(1, 6));
                 substrstan2++;
-                String finalstanNumber=substrstan1+String.valueOf(substrstan2);
-                editor.putString("terminalStan",finalstanNumber);
+                String finalstanNumber = substrstan1 + String.valueOf(substrstan2);
+                editor.putString("terminalStan", finalstanNumber);
                 editor.commit();
                 ////final qr string customer_id,fare,fareType,routeId,transId,transStatusId////////
-                String[] qrData=result.getContents().split(",");
-                customer_id=qrData[0];
+                String[] qrData = result.getContents().split(",");
+                customer_id = qrData[0];
+                if (qrData.length == 12) {
+                    String rId = dbManager.fetch_route_id_against_start_dest(qrData[6], qrData[7]);
+                    if (rId.equals(qrData[3])){
+                        fare = qrData[1];
+                    fareType = qrData[2];
+                    routeId = qrData[3];
+                    transId = qrData[4];
+                    transStatusId = qrData[5];
+                    from = qrData[6];
+                    to = qrData[7];
+                    no_of_persons = qrData[8];
+                    name = qrData[9];
+                    number = qrData[10];
+                    int total = Integer.valueOf(fare) / Integer.valueOf(no_of_persons);
 
-                if(qrData.length == 12 )
-                {
-
-                fare=qrData[1];
-                fareType=qrData[2];
-                routeId=qrData[3];
-                transId=qrData[4];
-                transStatusId=qrData[5];
-                from=qrData[6];
-                to=qrData[7];
-                no_of_persons=qrData[8];
-                name=qrData[9];
-                number=qrData[10];
-                int total = Integer.valueOf(fare) /Integer.valueOf(no_of_persons);
-
-                // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
+                    // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
                     DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     dateFormatter.setLenient(false);
                     Date today = new Date();
-                  String  date = dateFormatter.format(today);
+                    String date = dateFormatter.format(today);
 
 
-                    dbManager.insert_into_transactions(customer_id,fareType,routeId,"pending",fare,"pending",transStatusId,transId,date,date,date,finalstanNumber);
-                dbManager.insert_into_history_travel(routeId,customer_id,transId,no_of_persons,date,"0000-00-00");
+                    dbManager.insert_into_transactions(customer_id, fareType, routeId, "pending", fare, "pending", transStatusId, transId, date, date, date, finalstanNumber);
+                    dbManager.insert_into_history_travel(routeId, customer_id, transId, no_of_persons, date, "0000-00-00");
 
-                Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
-                final Beacon beacon = new Beacon.Builder()
-                        .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                        .setId2(customer_id)
-                        .setId3("5")
-                        .setManufacturer(0x0118) //for altBeacon
-                        .setTxPower(-59)
-                        .setDataFields(Arrays.asList(0l))
-                        .build();
-                // Change the layout below for other beacon types
-                final BeaconParser beaconParser = new BeaconParser()
-                        .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-                final BeaconTransmitter beaconTransmitter = new BeaconTransmitter(MainActivity.this, beaconParser);
-                beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-                beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
-                beaconTransmitter.startAdvertising(beacon, new AdvertiseCallback() {
+                    Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
+                    final Beacon beacon = new Beacon.Builder()
+                            .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
+                            .setId2(customer_id)
+                            .setId3("5")
+                            .setManufacturer(0x0118) //for altBeacon
+                            .setTxPower(-59)
+                            .setDataFields(Arrays.asList(0l))
+                            .build();
+                    // Change the layout below for other beacon types
+                    final BeaconParser beaconParser = new BeaconParser()
+                            .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+                    final BeaconTransmitter beaconTransmitter = new BeaconTransmitter(MainActivity.this, beaconParser);
+                    beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+                    beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
+                    beaconTransmitter.startAdvertising(beacon, new AdvertiseCallback() {
 
-                    @Override
-                    public void onStartFailure(int errorCode) {
-                        Log.e("Beacon", "Advertisement start failed with code: " + errorCode);
+                        @Override
+                        public void onStartFailure(int errorCode) {
+                            Log.e("Beacon", "Advertisement start failed with code: " + errorCode);
+                        }
+
+                        @Override
+                        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+                            Log.i("Beacon", "Advertisement start succeeded. " + settingsInEffect);
+                        }
+                    });
+
+                    new CountDownTimer(2000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+                        }
+
+                        public void onFinish() {
+                            beaconTransmitter.stopAdvertising();
+                        }
+                    }.start();
+
+                    printer = new Printer();
+
+
+                    int ret = printer.open();
+
+
+                    if (ret == 0) {
+
+                        Toast.makeText(MainActivity.this, "open success!!", Toast.LENGTH_SHORT).show();
+
+                        open_flg = true;
+
+                    } else {
+
+
+                        Toast.makeText(MainActivity.this, "open fail !!", Toast.LENGTH_SHORT).show();
+                        printer.setBold(true);
+                        open_flg = false;
+
                     }
 
-                    @Override
-                    public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                        Log.i("Beacon", "Advertisement start succeeded. " + settingsInEffect);
-                    }
-                });
 
-                new CountDownTimer(2000, 1000) {
-
-                    public void onTick(long millisUntilFinished) {
-                    }
-
-                    public void onFinish() {
-                        beaconTransmitter.stopAdvertising();
-                    }
-                }.start();
-
-                printer = new Printer();
-
-
-                int ret = printer.open();
-
-
-                if (ret == 0) {
-
-                    Toast.makeText(MainActivity.this, "open success!!", Toast.LENGTH_SHORT).show();
-
-                    open_flg = true;
-
-                } else {
-
-
-                    Toast.makeText(MainActivity.this, "open fail !!", Toast.LENGTH_SHORT).show();
+                    String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+                    printer.printString(line);
                     printer.setBold(true);
-                    open_flg = false;
-
-                }
-
-
-                String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-                printer.printString(line);
-                printer.setBold(true);
-                printer.setAlignment(1);
-                printer.setFontSize(2);
-                printer.printString("Epay Receipt");
-                printer.setFontSize(0);
-                printer.setBold(false);
-                printer.printPictureByRelativePath("/res/drawable/trans.png", 70, 70);
-                printer.printString(line);
-                printer.setAlignment(1);
-                printer.printQR(Qrsting, 4);
-                printer.printString(" ");
-                printer.setAlignment(0);
-                printer.printString("TRXN Date : " + date);
-                printer.setLeftMargin(2);
-                printer.printString("Customer : " + name);
-                printer.printString("TRXN Id : " +transId);
-                printer.printString("Tariff :  NGN " + total);
-                printer.printString("No. of Tickets : " + no_of_persons);
-                printer.printString("Total : NGN " + fare);
-                printer.printString("From : " + from);
-                printer.printString("To   : " + to);
-                printer.printString("Vehicle Reg# : " + busNumber);
-                printer.printString("STAN : " + finalstanNumber);
-                printer.printString("Terminal Id : " + sharedPreferences.getString("terminalId",""));
-                printer.setLeftMargin(0);
-                printer.printString(line);
-                printer.setAlignment(0);
-                printer.printString(" ");
-                printer.setAlignment(1);
-                printer.setBold(true);
-                printer.printString("POWER BY ELECTRONIC PAYPLUS");
-                printer.printString(" ");
-                printer.printString(" ");
+                    printer.setAlignment(1);
+                    printer.setFontSize(2);
+                    printer.printString("Epay Receipt");
+                    printer.setFontSize(0);
+                    printer.setBold(false);
+                    printer.printPictureByRelativePath("/res/drawable/trans.png", 70, 70);
+                    printer.printString(line);
+                    printer.setAlignment(1);
+                    printer.printQR(Qrsting, 4);
+                    printer.printString(" ");
+                    printer.setAlignment(0);
+                    printer.printString("TRXN Date : " + date);
+                    printer.setLeftMargin(2);
+                    printer.printString("Customer : " + name);
+                    printer.printString("TRXN Id : " + transId);
+                    printer.printString("Tariff :  NGN " + total);
+                    printer.printString("No. of Tickets : " + no_of_persons);
+                    printer.printString("Total : NGN " + fare);
+                    printer.printString("From : " + from);
+                    printer.printString("To   : " + to);
+                    printer.printString("Vehicle Reg# : " + busNumber);
+                    printer.printString("STAN : " + finalstanNumber);
+                    printer.printString("Terminal Id : " + sharedPreferences.getString("terminalId", ""));
+                    printer.setLeftMargin(0);
+                    printer.printString(line);
+                    printer.setAlignment(0);
+                    printer.printString(" ");
+                    printer.setAlignment(1);
+                    printer.setBold(true);
+                    printer.printString("POWER BY ELECTRONIC PAYPLUS");
+                    printer.printString(" ");
+                    printer.printString(" ");
 
 
-                printer.close();
+                    printer.close();
                 /*Intent intent=new Intent(this,Invoice.class);
                 intent.putExtra("customer_id",customer_id);
                 intent.putExtra("fareType",fareType);
@@ -320,8 +321,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("name",name);
                 intent.putExtra("number",number);
                 startActivity(intent);*/
-                qrScan.setOrientationLocked(true);
-                qrScan.initiateScan();
+                    qrScan.setOrientationLocked(true);
+                    qrScan.initiateScan();
+                }
+                    else{
+
+                        Toast.makeText(this, "This Vehicle has no route like this", Toast.LENGTH_SHORT).show();
+
+                    }
             }
 
             else{
@@ -489,4 +496,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
         requestQueue.add(request);
     }
+    public  void getRoutes(){
+        final SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
+        ringProgressDialog = ProgressDialog.show(MainActivity.this, "", "Please wait ...", true);
+        ringProgressDialog.setCancelable(false);
+        ringProgressDialog.show();
+
+        final StringRequest request = new StringRequest(Request.Method.POST, End_Points.GET_VEHICLE_ROUTES,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        ringProgressDialog.dismiss();
+                        try {
+                            JSONArray jsonArray=new JSONArray(response.trim());
+                            if(jsonArray.length()>0){
+                                dbManager.delete_route_table();
+                            }
+                            for (int i=0;i<jsonArray.length();i++){
+                                JSONObject object=jsonArray.getJSONObject(i);
+                                r_id=object.getString("id");
+                                route_code=object.getString("route_code");
+                                route_name=object.getString("route_name");
+                                route_start=object.getString("rout_start");
+                                route_destination=object.getString("rout_destination");
+                                route_added_date=object.getString("route_added_date");
+                                time=object.getString("time");
+                                route_added_by=object.getString("route_added_by");
+                                route_updated_date=object.getString("route_updated_date");
+                                route_updated_by=object.getString("route_updated_by");
+
+                                 dbManager.insert_into_routes(r_id,route_code,route_name,route_start,route_destination,route_added_date,time,route_added_by,route_updated_date,route_updated_by);
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                ringProgressDialog.dismiss();
+                if (error instanceof NoConnectionError) {
+
+                    Toast.makeText(MainActivity.this, "No connection Error", Toast.LENGTH_SHORT).show();
+
+                } else if (error instanceof TimeoutError) {
+
+                    Toast.makeText(MainActivity.this, " connection Time out Error", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("vehicle_id", sharedPreferences.getString("busId",""));
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(request);
+    }
+
 }

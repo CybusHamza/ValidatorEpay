@@ -99,7 +99,7 @@ public class HelloService extends Service {
                         route_updated_date=object.getString("route_updated_date");
                         route_updated_by=object.getString("route_updated_by");
 
-                        dbManager.insert_into_routes(id,route_code,route_name,route_start,route_destination,route_added_date,time,route_added_by,route_updated_date,route_updated_by);
+                      //  dbManager.insert_into_routes(id,route_code,route_name,route_start,route_destination,route_added_date,time,route_added_by,route_updated_date,route_updated_by);
 
                     }
 

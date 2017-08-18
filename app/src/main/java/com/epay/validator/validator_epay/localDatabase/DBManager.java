@@ -247,6 +247,18 @@ public class DBManager {
         }
         return id;
     }
+    public String fetch_route_id_against_start_dest(String route_start,String route_destination) {
+        String[] args={route_start,route_destination};
+        Cursor cursor=database.rawQuery("SELECT ID FROM ROUTES WHERE route_start = ? and route_destination = ?", args);
+        String id = null;
+        if(cursor.moveToFirst()){
+            do
+            {
+                id=cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+        return id;
+    }
     public String h_fetch_route_table_start(String id) {
         String[] args={id};
         Cursor cursor=database.rawQuery("SELECT route_start FROM ROUTES WHERE id = ?", args);
@@ -419,6 +431,9 @@ public class DBManager {
 
     public void deletetrans(long _id) {
         database.delete(DatabaseHelper.TRANSACTIONS_TABLE, DatabaseHelper.T_ID + "=" + _id, null);
+    }
+    public void delete_route_table(){
+        database.delete(DatabaseHelper.ROUTES,null,null);
     }
 
 }

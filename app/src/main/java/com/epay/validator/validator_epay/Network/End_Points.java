@@ -22,6 +22,7 @@ public class End_Points {
     public static String GET_LIVE_DATA=BASE_URL+"syncLocalDataBaseEpayValidator";
     public static String POST_IMAGE = "http://epay.cybussolutions.com"+ "upload_image_mobile.php";  //sdfghjk
     public  static String EDIT_profile = BASE_URL + "editProfile";
+    public  static String GET_VEHICLE_ROUTES = BASE_URL + "getRoutesAgainstVehicle";
 
 
 }
