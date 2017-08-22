@@ -78,6 +78,8 @@ public class SetupScreenExtended extends AppCompatActivity {
     private List<String> participantProcessorComm;
     private List<String> participantIssuerComm;
     private List<String> participantMngrComm;
+    private List<String> routeCodeList;
+    private List<String> routeIdList;
 
 
     SharedPreferences sharedPreferences;
@@ -125,11 +127,12 @@ public class SetupScreenExtended extends AppCompatActivity {
                             editor.putString("issuer_com", participantIssuerComm.get(0));
                             editor.putString("mngr_comm", participantMngrComm.get(0));
                             editor.putString("operator", sharedPreferences.getString("operatorId", ""));
-                            editor.putString("driverName", buss_list.get((int) vehicleRegSpinner.getSelectedItemId()));
+                            editor.putString("routeId",routeIdList.get((int) vehicleRegSpinner.getSelectedItemId()));
+                           /* editor.putString("driverName", buss_list.get((int) vehicleRegSpinner.getSelectedItemId()));
                             editor.putString("buss", bussId_list.get((int) vehicleRegSpinner.getSelectedItemId()));
                             editor.putString("Pincode", pincodelist.get((int) vehicleRegSpinner.getSelectedItemId()));
                             editor.putString("busNumber", busRegistrationList.get((int) vehicleRegSpinner.getSelectedItemId()));
-                            editor.putString("busId", bussIds_original_list.get((int) vehicleRegSpinner.getSelectedItemId()));
+                            editor.putString("busId", bussIds_original_list.get((int) vehicleRegSpinner.getSelectedItemId()));*/
                             editor.putString("is_first", "true");
 //                            editor.putString("login","true");
                             editor.apply();
@@ -138,7 +141,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                         finish();
                         startActivity(intent);
                     }else {
-                            Toast.makeText(SetupScreenExtended.this, "No Vehicle Found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SetupScreenExtended.this, "No Route Found", Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -254,7 +257,8 @@ public class SetupScreenExtended extends AppCompatActivity {
                                     (android.R.layout.simple_spinner_dropdown_item);
 
                             stakeholder.setAdapter(dataAdapter);
-                            getvehicles();
+                            //getvehicles();
+                            getRoutes();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -383,7 +387,78 @@ public class SetupScreenExtended extends AppCompatActivity {
         requestQueue.add(request);
 
     }
+    public  void getRoutes(){
+        int id = (int) stakeholder.getSelectedItemId();
+        final String organizationId=stakeID_list.get(id);
+        final SharedPreferences sharedPreferences = getSharedPreferences("OperatorInfo", MODE_PRIVATE);
+        ringProgressDialog = ProgressDialog.show(SetupScreenExtended.this, "", "Please wait ...", true);
+        ringProgressDialog.setCancelable(false);
+        ringProgressDialog.show();
 
+        final StringRequest request = new StringRequest(Request.Method.POST, End_Points.GET_VEHICLE_ROUTES,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        ringProgressDialog.dismiss();
+                        routeCodeList=new ArrayList<>();
+                        routeIdList=new ArrayList<>();
+                        if(response.equals("false")) {
+                            routeCodeList.add(0, "");
+                            routeIdList.add(0, "");
+                        }
+                        try {
+                            JSONArray jsonArray=new JSONArray(response.trim());
+                            for (int i=0;i<jsonArray.length();i++) {
+                                JSONObject object = jsonArray.getJSONObject(i);
+                                routeCodeList.add(object.getString("route_code"));
+                                routeIdList.add(object.getString("id"));
+                            }
+                            if(jsonArray.length()>0) {
+                                getParticipantCommission();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+                                (SetupScreenExtended.this, R.layout.spinner_item, routeCodeList);
+
+                        dataAdapter.setDropDownViewResource
+                                (android.R.layout.simple_spinner_dropdown_item);
+
+                        vehicleRegSpinner.setAdapter(dataAdapter);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                ringProgressDialog.dismiss();
+                if (error instanceof NoConnectionError) {
+
+                    Toast.makeText(SetupScreenExtended.this, "No connection Error", Toast.LENGTH_SHORT).show();
+
+                } else if (error instanceof TimeoutError) {
+
+                    Toast.makeText(SetupScreenExtended.this, " connection Time out Error", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("vehicle_id",organizationId);
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue requestQueue = Volley.newRequestQueue(SetupScreenExtended.this);
+        requestQueue.add(request);
+    }
    /* public void AllTerminals() {
 
         ringProgressDialog = ProgressDialog.show(SetupScreenExtended.this, "", "Please wait ...", true);
