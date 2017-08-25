@@ -185,128 +185,127 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String[] qrData = result.getContents().split(",");
                 customer_id = qrData[0];
                 if (qrData.length == 12) {
-                    String rId = dbManager.fetch_route_id_against_start_dest(qrData[6], qrData[7]);
-                    if (rId.equals(qrData[3])){
-                        fare = qrData[1];
-                    fareType = qrData[2];
-                    routeId = qrData[3];
-                    transId = qrData[4];
-                    transStatusId = qrData[5];
-                    from = qrData[6];
-                    to = qrData[7];
-                    no_of_persons = qrData[8];
-                    name = qrData[9];
-                    number = qrData[10];
-                    int total = Integer.valueOf(fare) / Integer.valueOf(no_of_persons);
+                    if(printer.queState()!=1) {
+                        String rId = dbManager.fetch_route_id_against_start_dest(qrData[6], qrData[7]);
+                        if (rId.equals(qrData[3])) {
+                            fare = qrData[1];
+                            fareType = qrData[2];
+                            routeId = qrData[3];
+                            transId = qrData[4];
+                            transStatusId = qrData[5];
+                            from = qrData[6];
+                            to = qrData[7];
+                            no_of_persons = qrData[8];
+                            name = qrData[9];
+                            number = qrData[10];
+                            int total = Integer.valueOf(fare) / Integer.valueOf(no_of_persons);
 
-                    // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
-                    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    dateFormatter.setLenient(false);
-                    Date today = new Date();
-                    String date = dateFormatter.format(today);
-
-
-                    dbManager.insert_into_transactions(customer_id, fareType, routeId, "pending", fare, "pending", transStatusId, transId, date, date, date, finalstanNumber);
-                    dbManager.insert_into_history_travel(routeId, customer_id, transId, no_of_persons, date, "0000-00-00");
-
-                    Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
-                    final Beacon beacon = new Beacon.Builder()
-                            .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                            .setId2(customer_id)
-                            .setId3("5")
-                            .setManufacturer(0x0118) //for altBeacon
-                            .setTxPower(-59)
-                            .setDataFields(Arrays.asList(0l))
-                            .build();
-                    // Change the layout below for other beacon types
-                    final BeaconParser beaconParser = new BeaconParser()
-                            .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-                    final BeaconTransmitter beaconTransmitter = new BeaconTransmitter(MainActivity.this, beaconParser);
-                    beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-                    beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
-                    beaconTransmitter.startAdvertising(beacon, new AdvertiseCallback() {
-
-                        @Override
-                        public void onStartFailure(int errorCode) {
-                            Log.e("Beacon", "Advertisement start failed with code: " + errorCode);
-                        }
-
-                        @Override
-                        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                            Log.i("Beacon", "Advertisement start succeeded. " + settingsInEffect);
-                        }
-                    });
-
-                    new CountDownTimer(2000, 1000) {
-
-                        public void onTick(long millisUntilFinished) {
-                        }
-
-                        public void onFinish() {
-                            beaconTransmitter.stopAdvertising();
-                        }
-                    }.start();
-
-                    printer = new Printer();
+                            // textViewName.setText(customer_id+" "+fare+" "+fareType+" "+routeId+" "+transId+" "+transStatusId);
+                            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                            dateFormatter.setLenient(false);
+                            Date today = new Date();
+                            String date = dateFormatter.format(today);
 
 
-                    int ret = printer.open();
+                            dbManager.insert_into_transactions(customer_id, fareType, routeId, "pending", fare, "pending", transStatusId, transId, date, date, date, finalstanNumber);
+                            dbManager.insert_into_history_travel(routeId, customer_id, transId, no_of_persons, date, "0000-00-00");
+
+                            Qrsting = customer_id + "," + fare + "," + fareType + "," + routeId + "," + transId + "," + transStatusId + "," + from + "," + to + "," + no_of_persons + "," + name + "," + number;
+                            final Beacon beacon = new Beacon.Builder()
+                                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
+                                    .setId2(customer_id)
+                                    .setId3("5")
+                                    .setManufacturer(0x0118) //for altBeacon
+                                    .setTxPower(-59)
+                                    .setDataFields(Arrays.asList(0l))
+                                    .build();
+                            // Change the layout below for other beacon types
+                            final BeaconParser beaconParser = new BeaconParser()
+                                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+                            final BeaconTransmitter beaconTransmitter = new BeaconTransmitter(MainActivity.this, beaconParser);
+                            beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+                            beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
+                            beaconTransmitter.startAdvertising(beacon, new AdvertiseCallback() {
+
+                                @Override
+                                public void onStartFailure(int errorCode) {
+                                    Log.e("Beacon", "Advertisement start failed with code: " + errorCode);
+                                }
+
+                                @Override
+                                public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+                                    Log.i("Beacon", "Advertisement start succeeded. " + settingsInEffect);
+                                }
+                            });
+
+                            new CountDownTimer(2000, 1000) {
+
+                                public void onTick(long millisUntilFinished) {
+                                }
+
+                                public void onFinish() {
+                                    beaconTransmitter.stopAdvertising();
+                                }
+                            }.start();
+
+                            printer = new Printer();
 
 
-                    if (ret == 0) {
-
-                        Toast.makeText(MainActivity.this, "open success!!", Toast.LENGTH_SHORT).show();
-
-                        open_flg = true;
-
-                    } else {
+                            int ret = printer.open();
 
 
-                        Toast.makeText(MainActivity.this, "open fail !!", Toast.LENGTH_SHORT).show();
-                        printer.setBold(true);
-                        open_flg = false;
+                            if (ret == 0) {
 
-                    }
+                                Toast.makeText(MainActivity.this, "open success!!", Toast.LENGTH_SHORT).show();
 
+                                open_flg = true;
 
-                    String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-                    printer.printString(line);
-                    printer.setBold(true);
-                    printer.setAlignment(1);
-                    printer.setFontSize(2);
-                    printer.printString("Epay Receipt");
-                    printer.setFontSize(0);
-                    printer.setBold(false);
-                    printer.printPictureByRelativePath("/res/drawable/trans.png", 70, 70);
-                    printer.printString(line);
-                    printer.setAlignment(1);
-                    printer.printQR(Qrsting, 4);
-                    printer.printString(" ");
-                    printer.setAlignment(0);
-                    printer.printString("TRXN Date : " + date);
-                    printer.setLeftMargin(2);
-                    printer.printString("Customer : " + name);
-                    printer.printString("TRXN Id : " + transId);
-                    printer.printString("Tariff :  NGN " + total);
-                    printer.printString("No. of Tickets : " + no_of_persons);
-                    printer.printString("Total : NGN " + fare);
-                    printer.printString("From : " + from);
-                    printer.printString("To   : " + to);
-                    printer.printString("Vehicle Reg# : " + busNumber);
-                    printer.printString("STAN : " + finalstanNumber);
-                    printer.printString("Terminal Id : " + sharedPreferences.getString("terminalId", ""));
-                    printer.setLeftMargin(0);
-                    printer.printString(line);
-                    printer.setAlignment(0);
-                    printer.printString(" ");
-                    printer.setAlignment(1);
-                    printer.setBold(true);
-                    printer.printString("POWER BY ELECTRONIC PAYPLUS");
-                    printer.printString(" ");
-                    printer.printString(" ");
+                            } else {
 
 
-                    printer.close();
+                                Toast.makeText(MainActivity.this, "open fail !!", Toast.LENGTH_SHORT).show();
+                                printer.setBold(true);
+                                open_flg = false;
+
+                            }
+
+
+                            String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+                            printer.printString(line);
+                            printer.setBold(true);
+                            printer.setAlignment(1);
+                            printer.setFontSize(2);
+                            printer.printString("Epay Receipt");
+                            printer.setFontSize(0);
+                            printer.setBold(false);
+                            printer.printPictureByRelativePath("/res/drawable/trans.png", 70, 70);
+                            printer.printString(line);
+                            printer.setAlignment(1);
+                            printer.printQR(Qrsting, 4);
+                            printer.printString(" ");
+                            printer.setAlignment(0);
+                            printer.printString("TRXN Date : " + date);
+                            printer.setLeftMargin(2);
+                            printer.printString("Customer : " + name);
+                            printer.printString("TRXN Id : " + transId);
+                            printer.printString("Tariff :  NGN " + total);
+                            printer.printString("No. of Tickets : " + no_of_persons);
+                            printer.printString("Total : NGN " + fare);
+                            printer.printString("From : " + from);
+                            printer.printString("To   : " + to);
+                            printer.printString("Vehicle Reg# : " + busNumber);
+                            printer.printString("STAN : " + finalstanNumber);
+                            printer.printString("Terminal Id : " + sharedPreferences.getString("terminalId", ""));
+                            printer.setLeftMargin(0);
+                            printer.printString(line);
+                            printer.setAlignment(0);
+                            printer.printString(" ");
+                            printer.setAlignment(1);
+                            printer.setBold(true);
+                            printer.printString("POWER BY ELECTRONIC PAYPLUS");
+                            printer.printString(" ");
+                            printer.printString(" ");
+                            printer.close();
                 /*Intent intent=new Intent(this,Invoice.class);
                 intent.putExtra("customer_id",customer_id);
                 intent.putExtra("fareType",fareType);
@@ -321,17 +320,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("name",name);
                 intent.putExtra("number",number);
                 startActivity(intent);*/
-                    qrScan.setOrientationLocked(true);
-                    qrScan.initiateScan();
-                }
-                    else{
+                            qrScan.setOrientationLocked(true);
+                            qrScan.initiateScan();
+                        } else {
 
-                        Toast.makeText(this, "This Vehicle has no route like this", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "This Vehicle has no route like this", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else{
+
+                        Toast.makeText(this, "Please Load the Paper first", Toast.LENGTH_SHORT).show();
 
                     }
-            }
-
-            else{
+            } else{
 
                     Toast.makeText(this, "In-Valid Qr Code Scanned.", Toast.LENGTH_SHORT).show();
 

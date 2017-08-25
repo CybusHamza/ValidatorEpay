@@ -69,7 +69,7 @@ public class LoginScreen extends AppCompatActivity {
         etDriverName= (EditText) findViewById(R.id.etdriverName);
         etPass= (EditText) findViewById(R.id.etdriverPass);
         btnLogin= (Button) findViewById(R.id.btnLogin);
-
+        etDriverName.setText(terminalName);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

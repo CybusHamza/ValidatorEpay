@@ -101,18 +101,18 @@ public class SetupScreenExtended extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         stakeholder= (Spinner) findViewById(R.id.stakeholder);
-        vehicleRegSpinner= (Spinner) findViewById(R.id.vehicleRegSpinner);
+        //vehicleRegSpinner= (Spinner) findViewById(R.id.vehicleRegSpinner);
         SaveSettings= (Button) findViewById(R.id.saveSettings);
         SaveSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //String stakeholderName= stakeholder.getSelectedItem().toString();
                 int position=stakeholder.getSelectedItemPosition();
-                int position1=vehicleRegSpinner.getSelectedItemPosition();
+               // int position1=vehicleRegSpinner.getSelectedItemPosition();
                 //String vehicleRegName= vehicleRegSpinner.getSelectedItem().toString();
                     if (position!=-1) {
                         int id = (int) stakeholder.getSelectedItemId();
-                        if (position1!=-1){
+                       // if (position1!=-1){
                             editor.putString("stakeholder", stakeID_list.get((int) stakeholder.getSelectedItemId()));
                             editor.putString("commission", commissionList.get((int) stakeholder.getSelectedItemId()));
                             editor.putString("commissionType", commissionTypeList.get((int) stakeholder.getSelectedItemId()));
@@ -127,7 +127,7 @@ public class SetupScreenExtended extends AppCompatActivity {
                             editor.putString("issuer_com", participantIssuerComm.get(0));
                             editor.putString("mngr_comm", participantMngrComm.get(0));
                             editor.putString("operator", sharedPreferences.getString("operatorId", ""));
-                            editor.putString("routeId",routeIdList.get((int) vehicleRegSpinner.getSelectedItemId()));
+                          //  editor.putString("routeId",routeIdList.get((int) vehicleRegSpinner.getSelectedItemId()));
                            /* editor.putString("driverName", buss_list.get((int) vehicleRegSpinner.getSelectedItemId()));
                             editor.putString("buss", bussId_list.get((int) vehicleRegSpinner.getSelectedItemId()));
                             editor.putString("Pincode", pincodelist.get((int) vehicleRegSpinner.getSelectedItemId()));
@@ -140,10 +140,10 @@ public class SetupScreenExtended extends AppCompatActivity {
                         Intent intent = new Intent(SetupScreenExtended.this, LoginScreen.class);
                         finish();
                         startActivity(intent);
-                    }else {
+                   /* }else {
                             Toast.makeText(SetupScreenExtended.this, "No Route Found", Toast.LENGTH_SHORT).show();
 
-                        }
+                        }*/
 
                     } else {
                         Toast.makeText(SetupScreenExtended.this, "Please Select Stakeholder", Toast.LENGTH_SHORT).show();
@@ -187,7 +187,7 @@ public class SetupScreenExtended extends AppCompatActivity {
 
                     int id = (int) terminal.getSelectedItemId();
                     if ((managerCodeList.get(id).equals(mngrCode.getText().toString()))) {
-                        myalertdialog.dismiss();
+                       // myalertdialog.dismiss();
                         editor.putString("terminalName", terminal.getSelectedItem().toString());
                         editor.putString("terminalId", terminalIdList.get(id));
                         editor.putString("bankId", bank_id_List.get(id));
@@ -250,15 +250,16 @@ public class SetupScreenExtended extends AppCompatActivity {
 
                             }
 
-                            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+                           /* ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
                                     (SetupScreenExtended.this, R.layout.spinner_item, stake_list);
 
                             dataAdapter.setDropDownViewResource
                                     (android.R.layout.simple_spinner_dropdown_item);
 
-                            stakeholder.setAdapter(dataAdapter);
+                            stakeholder.setAdapter(dataAdapter);*/
                             //getvehicles();
-                            getRoutes();
+                          //  getRoutes();
+                            getParticipantCommission();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -297,8 +298,8 @@ public class SetupScreenExtended extends AppCompatActivity {
     }
 
     public void getParticipantCommission() {
-        int id = (int) stakeholder.getSelectedItemId();
-        final String commissionId=commissionIdList.get(id);
+        //int id = (int) stakeholder.getSelectedItemId();
+        final String commissionId=commissionIdList.get(0);
         ringProgressDialog = ProgressDialog.show(SetupScreenExtended.this, "", "Please wait ...", true);
         ringProgressDialog.setCancelable(false);
         ringProgressDialog.show();
@@ -347,7 +348,25 @@ public class SetupScreenExtended extends AppCompatActivity {
                                     participantMngrComm.add(jsonObject.getString("part_comm"));
                                 }
                             }
+                            editor.putString("stakeholder", stakeID_list.get(0));
+                            editor.putString("commission", commissionList.get(0));
+                            editor.putString("commissionType", commissionTypeList.get(0));
+                            editor.putString("acquirer_com", participantAcquirerComm.get(0));
+                            editor.putString("ptsp_com", participantPtspComm.get(0));
+                            editor.putString("opr_comm", participantOprComm.get(0));
+                            editor.putString("switch_com", participantSwitchComm.get(0));
+                            editor.putString("processor_com", participantProcessorComm.get(0));
+                            editor.putString("issuer_com", participantIssuerComm.get(0));
+                            editor.putString("mngr_comm", participantMngrComm.get(0));
+                            editor.putString("operator", sharedPreferences.getString("operatorId", ""));
 
+                            editor.putString("is_first", "true");
+//                            editor.putString("login","true");
+                            editor.apply();
+
+                            Intent intent = new Intent(SetupScreenExtended.this, LoginScreen.class);
+                            finish();
+                            startActivity(intent);
                         } catch (JSONException e1) {
                             e1.printStackTrace();
                         }

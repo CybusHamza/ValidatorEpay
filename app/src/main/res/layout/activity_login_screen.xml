@@ -23,16 +23,16 @@
         android:id="@+id/tvdriverName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Terminal Name"
+        android:text="Terminal Id"
         android:textColor="#fff"
         android:textSize="20dp"/>
         <EditText
             android:id="@+id/etdriverName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Terminal Name"
+            android:hint="Enter Terminal Id"
             android:textColor="#fff"
-            android:textColorHint="#fff"
+            android:textColorHint="#d1cccc"
             android:layout_marginTop="20dp"/>
         <TextView
             android:id="@+id/tvdriverPass"
@@ -49,7 +49,7 @@
             android:hint="Enter Manager Pin Code"
             android:textColor="#fff"
             android:inputType="textPassword"
-            android:textColorHint="#fff"
+            android:textColorHint="#d1cccc"
             android:layout_marginTop="20dp"/>
         <Button
             android:padding="15dp"
