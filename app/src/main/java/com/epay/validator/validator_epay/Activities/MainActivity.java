@@ -5,9 +5,11 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -52,6 +54,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 //implementing onclicklistener
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     String r_id,route_code,route_name,route_start,route_destination,route_added_date,time,route_added_by,route_updated_date,route_updated_by;
@@ -85,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      String Qrsting;
     String busNumber,stanNumber;
     View logo;
+
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +148,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonScan.setOnClickListener(this);
        // buttonGetLiveData.setOnClickListener(this);
         buttonTransactions.setOnClickListener(this);
-    }
 
+        mReceiver = new BatteryBroadCastReciever();
+      //  registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    }
+    @Override
+    protected void onStart() {
+        registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        super.onStart();
+    }
+    @Override
+    protected void onStop() {
+        unregisterReceiver(mReceiver);
+        super.onStop();
+    }
     //Getting the scan results
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -184,6 +202,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ////final qr string customer_id,fare,fareType,routeId,transId,transStatusId////////
                 String[] qrData = result.getContents().split(",");
                 customer_id = qrData[0];
+                printer = new Printer();
+
+
+                int ret = printer.open();
                 if (qrData.length == 12) {
                     if(printer.queState()!=1) {
                         String rId = dbManager.fetch_route_id_against_start_dest(qrData[6], qrData[7]);
@@ -248,10 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 }
                             }.start();
 
-                            printer = new Printer();
 
-
-                            int ret = printer.open();
 
 
                             if (ret == 0) {
@@ -273,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
                             printer.printString(line);
                             printer.setBold(true);
+                            printer.printString("");
                             printer.setAlignment(1);
                             printer.setFontSize(2);
                             printer.printString("Epay Receipt");
@@ -293,14 +313,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             printer.printString("Total : NGN " + fare);
                             printer.printString("From : " + from);
                             printer.printString("To   : " + to);
-                            printer.printString("Vehicle Reg# : " + busNumber);
+                           // printer.printString("Vehicle Reg# : " + busNumber);
                             printer.printString("STAN : " + finalstanNumber);
                             printer.printString("Terminal Id : " + sharedPreferences.getString("terminalId", ""));
                             printer.setLeftMargin(0);
                             printer.printString(line);
                             printer.setAlignment(0);
                             printer.printString(" ");
-                            printer.setAlignment(1);
+                            printer.setAlignment(0);
                             printer.setBold(true);
                             printer.printString("POWER BY ELECTRONIC PAYPLUS");
                             printer.printString(" ");
@@ -323,7 +343,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             qrScan.setOrientationLocked(true);
                             qrScan.initiateScan();
                         } else {
-
+                            new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Error!")
+                                    .setConfirmText("OK").setContentText("This Vehicle has no route like this")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog) {
+                                            sDialog.dismiss();
+                                        }
+                                    })
+                                    .show();
                             Toast.makeText(this, "This Vehicle has no route like this", Toast.LENGTH_SHORT).show();
 
                         }

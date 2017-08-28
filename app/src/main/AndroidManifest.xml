@@ -12,7 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
         <activity android:name=".Activities.MainActivity" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
@@ -36,6 +37,11 @@
         </activity>
         <activity android:name=".Activities.SetupScreenExtended" />
         <activity android:name=".Activities.LoginScreen"></activity>
+        <receiver android:name=".Activities.BatteryBroadCastReciever">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_CHANGED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

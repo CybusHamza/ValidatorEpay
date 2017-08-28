@@ -19,10 +19,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -38,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Transactions extends AppCompatActivity  {
+    private static final int MY_SOCKET_TIMEOUT_MS = 10000;
     Toolbar toolbar;
     private DBManager dbManager;
     String[] customer_id;
@@ -191,6 +194,8 @@ public class Transactions extends AppCompatActivity  {
                     dbManager.deletetrans(Long.parseLong(transId.get(0)));
 
                     //if()
+                }else {
+                    finish();
                 }
 
             }
@@ -204,7 +209,7 @@ public class Transactions extends AppCompatActivity  {
                 if (error instanceof NetworkError) {
                     Toast.makeText(Transactions.this, "Cannot connect to Internet...Please check your connection!", Toast.LENGTH_LONG).show();
                 }
-                else
+                else if(error instanceof TimeoutError)
                 {
                     Toast.makeText(Transactions.this, "Connection time out error ", Toast.LENGTH_SHORT).show();
                 }
@@ -285,7 +290,10 @@ public class Transactions extends AppCompatActivity  {
                 return map;
             }
         };
-
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         RequestQueue requestQueue = Volley.newRequestQueue(Transactions.this);
         requestQueue.add(request);
 
